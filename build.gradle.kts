@@ -100,12 +100,13 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     "minecraft"("net.minecraftforge:forge:1.16.4-35.1.36")
 
-    // Specify that the standard of library of Kotlin should be used to compile: TODO Get it working
-    implementation(the<net.minecraftforge.gradle.userdev.DependencyManagementExtension>().deobf("thedarkcolour:kotlinforforge:1.7.0"))
+    // Specify that the standard of library of Kotlin should be used to compile
+    implementation(project.the<net.minecraftforge.gradle.userdev.DependencyManagementExtension>().deobf("thedarkcolour:kotlinforforge:1.7.0"))
 }
 
 // Repositories to add Kotlin
 repositories {
+    jcenter()
     maven {
         name = "Kotlin for Forge"
         url = uri("https://thedarkcolour.github.io/KotlinForForge/")
