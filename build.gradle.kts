@@ -102,7 +102,7 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     "minecraft"("net.minecraftforge:forge:1.16.4-35.1.36")
 
-    // Specify that the standard of library of Kotlin should be used to compile
+    // Specify that the standard library of Kotlin that should be used to compile
     implementation(project.the<DependencyManagementExtension>().deobf("thedarkcolour:kotlinforforge:1.7.0"))
 }
 
