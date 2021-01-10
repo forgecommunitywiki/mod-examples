@@ -40,14 +40,14 @@ displayURL="https://mmt.ashwork.net/forge/1-16-x/" #optional
 # logoFile="examplemod.png" #optional
 
 # A text field displayed in the mod UI
-credits="The Forge Community Wiki and Kotlin, provided via KotlinForForge by thedarkcolour" #optional
+credits="The Forge Community Wiki and Java" #optional
 
 # A text field displayed in the mod UI
 authors="ChampionAsh5357" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-An example mod for programming in Forge 1.16.x for Kotlin.
+An example mod for programming in Forge 1.16.x for Java.
 '''
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
