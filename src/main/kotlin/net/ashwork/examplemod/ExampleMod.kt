@@ -1,5 +1,10 @@
 package net.ashwork.examplemod
 
-object ExampleMod {
-    
+import net.minecraftforge.fml.common.Mod
+
+@Mod(ExampleMod.ID)
+internal class ExampleMod {
+    companion object {
+        const val ID: String = "examplemod"
+    }
 }
