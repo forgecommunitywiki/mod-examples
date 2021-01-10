@@ -67,7 +67,7 @@ An example mod for programming in Forge 1.16.x for Kotlin.
 [[dependencies.examplemod]]
     modId="minecraft"
     mandatory=true
-# This version range declares a minimum of the current minecraft version up to but not including the next major version
+    # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[1.16.4,1.17)"
     ordering="NONE"
     side="BOTH"
