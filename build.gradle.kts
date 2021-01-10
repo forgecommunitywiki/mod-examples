@@ -1,6 +1,8 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.format.DateTimeFormatter
 import java.time.Instant
 import net.minecraftforge.gradle.common.util.*
+import net.minecraftforge.gradle.userdev.*
 
 buildscript {
     repositories {
@@ -23,7 +25,7 @@ version = "1.0.0.0"
 group = "net.ashwork" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 base.archivesBaseName = "examplemod"
 
-configure<MinecraftExtension> {
+configure<UserDevExtension> {
     // The mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   Snapshot are built nightly.
     // stable_#            Stables are built at the discretion of the MCP team.
@@ -101,7 +103,7 @@ dependencies {
     "minecraft"("net.minecraftforge:forge:1.16.4-35.1.36")
 
     // Specify that the standard of library of Kotlin should be used to compile
-    implementation(project.the<net.minecraftforge.gradle.userdev.DependencyManagementExtension>().deobf("thedarkcolour:kotlinforforge:1.7.0"))
+    implementation(project.the<DependencyManagementExtension>().deobf("thedarkcolour:kotlinforforge:1.7.0"))
 }
 
 // Repositories to add Kotlin
@@ -131,7 +133,7 @@ tasks {
 }
 
 // Forces JVM targets to be 8
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.jvmTarget = "1.8"
 }
 configure<JavaPluginConvention> {
