@@ -14,7 +14,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 version = '1.0.0.0'
-group = 'net.ashwork' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'io.github.forgecommunitywiki' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'examplemod'
 
 // Forces JVM targets to be 8
@@ -109,11 +109,11 @@ jar {
     manifest {
         attributes([
             "Specification-Title": "Example Mod",
-            "Specification-Vendor": "ChampionAsh5357",
+            "Specification-Vendor": "Forge Community Wiki",
             "Specification-Version": "${version}", // We are version 1 of ourselves
             "Implementation-Title": "Example Mod",
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"ChampionAsh5357",
+            "Implementation-Vendor" :"Forge Community Wiki",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

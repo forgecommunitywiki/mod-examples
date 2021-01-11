@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 ChampionAsh5357
+ * Copyright (c) 2021 Forge Community Wiki
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,13 @@
  * SOFTWARE.
  */
 
-package net.ashwork.examplemod
+package io.github.forgecommunitywiki.examplemod
 
 import net.minecraftforge.fml.common.Mod
 
 /**
  * The main class used to handle any registration or common events associated
  * with the mod.
- *
- * @author ChampionAsh5357
  */
 @Mod(ExampleMod.ID)
 class ExampleMod {

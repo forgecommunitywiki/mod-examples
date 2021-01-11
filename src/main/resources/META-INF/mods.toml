@@ -14,7 +14,7 @@ loaderVersion="[35,)" #mandatory This is typically bumped every Minecraft versio
 license="MIT"
 
 # A URL to refer people to when problems occur with this mod
-issueTrackerURL="https://github.com/ChampionAsh5357/Minecraft-Modding-Tutorials/issues" #optional
+issueTrackerURL="https://github.com/forgecommunitywiki/mod-examples/issues" #optional
 
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
@@ -34,16 +34,16 @@ displayName="Example Mod" #mandatory
 # updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="https://mmt.ashwork.net/forge/1-16-x/" #optional
+displayURL="https://github.com/forgecommunitywiki/mod-examples" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
 # logoFile="examplemod.png" #optional
 
 # A text field displayed in the mod UI
-credits="The Forge Community Wiki and Scala, provided via Scorge by Minecraft Forge" #optional
+credits="Scala, provided via Scorge by Minecraft Forge" #optional
 
 # A text field displayed in the mod UI
-authors="ChampionAsh5357" #optional
+authors="Forge Community Wiki" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
