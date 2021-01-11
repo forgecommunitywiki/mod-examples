@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 ChampionAsh5357
+ * Copyright (c) 2021 Forge Community Wiki
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,35 @@
  * SOFTWARE.
  */
 
-package net.ashwork.examplemod;
+package io.github.forgecommunitywiki;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * The main class used to handle any registration or common events associated
- * with the mod.
- *
- * @author ChampionAsh5357
+ * A class used to handle all registry objects added by this mod.
  */
-@Mod(ExampleMod.ID)
-public class ExampleMod {
+public class GeneralRegistrar {
+
+    // Registers
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
+            ExampleMod.ID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ExampleMod.ID);
+    private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister
+            .create(ForgeRegistries.SOUND_EVENTS, ExampleMod.ID);
+
     /**
-     * The id or namespace associated with this mod.
+     * Registers the {@link DeferredRegister}s to the event bus.
+     *
+     * @param modBus The associated mod event bus
      */
-    public static final String ID = "examplemod";
-
-    public ExampleMod() {
-        final IEventBus mod = FMLJavaModLoadingContext.get().getModEventBus();
-
-        GeneralRegistrar.register(mod);
+    public static void register(final IEventBus modBus) {
+        GeneralRegistrar.BLOCKS.register(modBus);
+        GeneralRegistrar.ITEMS.register(modBus);
+        GeneralRegistrar.SOUND_EVENTS.register(modBus);
     }
 }
