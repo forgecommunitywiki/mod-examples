@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.github.forgecommunitywiki;
+package io.github.forgecommunitywiki.examplemod;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
