@@ -24,8 +24,21 @@
 
 package io.github.forgecommunitywiki.examplemod;
 
+import java.util.stream.Stream;
+
+import io.github.forgecommunitywiki.examplemod.client.ClientHandler;
+import io.github.forgecommunitywiki.examplemod.data.client.ItemModels;
+import io.github.forgecommunitywiki.examplemod.data.client.Localizations;
+import io.github.forgecommunitywiki.examplemod.data.server.Recipes;
+import net.minecraft.data.DataGenerator;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
@@ -33,15 +46,50 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  * with the mod.
  */
 @Mod(ExampleMod.ID)
-public class ExampleMod {
+public final class ExampleMod {
     /**
      * The id or namespace associated with this mod.
      */
     public static final String ID = "examplemod";
 
     public ExampleMod() {
-        final IEventBus mod = FMLJavaModLoadingContext.get().getModEventBus();
+        final IEventBus mod = FMLJavaModLoadingContext.get().getModEventBus(), forge = MinecraftForge.EVENT_BUS;
 
+        // Initialize physical client
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> new ClientHandler(mod, forge));
+
+        // Initialize registries
         GeneralRegistrar.register(mod);
+
+        // Attach common events
+        mod.addListener(this::commonSetup);
+        mod.addListener(this::attachProviders);
+    }
+
+    /**
+     * Handles items that should occur directly after registry events including map
+     * introductions and vanilla registrations. Only add if {@link InterModComms},
+     * will not be needed. Otherwise, use {@link FMLLoadCompleteEvent}.
+     *
+     * @param event The common setup event
+     */
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(GeneralRegistrar::registerSlaveMaps);
+    }
+
+    /**
+     * Attaches all providers to be used with data generation.
+     *
+     * @param event The data generator event
+     */
+    private void attachProviders(final GatherDataEvent event) {
+        final DataGenerator gen = event.getGenerator();
+        final ExistingFileHelper helper = event.getExistingFileHelper();
+        if (event.includeClient()) {
+            Stream.of("en_us").forEach(locale -> gen.addProvider(new Localizations(gen, locale)));
+            gen.addProvider(new ItemModels(gen, helper));
+        }
+        if (event.includeServer())
+            gen.addProvider(new Recipes(gen));
     }
 }
