@@ -22,7 +22,7 @@ apply(plugin = "net.minecraftforge.gradle")
 
 // Default Mod Information
 version = "1.0.0.0"
-group = "net.ashwork" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "io.github.forgecommunitywiki" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 base.archivesBaseName = "examplemod"
 
 configure<UserDevExtension> {
@@ -121,10 +121,10 @@ tasks {
         manifest {
             attributes (
                     "Specification-Title" to "Example Mod",
-                    "Specification-Vendor" to "ChampionAsh5357",
+                    "Specification-Vendor" to "Forge Community Wiki",
                     "Specification-Version" to project.version,
                     "Implementation-Title" to "Example Mod",
-                    "Implementation-Vendor" to "ChampionAsh5357",
+                    "Implementation-Vendor" to "Forge Community Wiki",
                     "Implementation-Version" to project.version,
                     "Implementation-Timestamp" to DateTimeFormatter.ISO_INSTANT.format(Instant.now())
             )
