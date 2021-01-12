@@ -27,7 +27,6 @@ package io.github.forgecommunitywiki.examplemod.item;
 import java.util.Optional;
 
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar;
-import io.github.forgecommunitywiki.examplemod.util.GeneralHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
@@ -56,7 +55,7 @@ public class InstrumentElementItem extends Item {
                 .ofNullable(GeneralRegistrar.getInstrumentElementSounds(this, world.getBlockState(pos).getBlock()))
                 .map(sound -> {
                     world.playSound(context.getPlayer(), pos, sound, SoundCategory.BLOCKS, 0.1f,
-                            (float) Math.pow(2d, (GeneralHelper.RANDOM.nextInt(24) - 12) / 12d));
+                            (float) Math.pow(2d, (Item.random.nextInt(24) - 12) / 12d));
                     return ActionResultType.func_233537_a_(world.isRemote);
                 }).orElse(super.onItemUse(context));
     }

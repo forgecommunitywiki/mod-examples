@@ -25,7 +25,6 @@
 package io.github.forgecommunitywiki.examplemod.util;
 
 import java.util.Objects;
-import java.util.Random;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,10 +44,6 @@ public class GeneralHelper {
      * Global gson instance.
      */
     public static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-    /**
-     * General random used for this mod.
-     */
-    public static final Random RANDOM = new Random();
 
     /**
      * Creates a codec that converts a string to the specified registry.
