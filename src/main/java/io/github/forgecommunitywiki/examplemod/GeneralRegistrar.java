@@ -94,7 +94,7 @@ public final class GeneralRegistrar {
      *
      * @param modBus The associated mod event bus
      */
-    public static void register(final IEventBus modBus) {
+    protected static void register(final IEventBus modBus) {
         GeneralRegistrar.BLOCKS.register(modBus);
         GeneralRegistrar.ITEMS.register(modBus);
         GeneralRegistrar.SOUND_EVENTS.register(modBus);
@@ -103,7 +103,7 @@ public final class GeneralRegistrar {
     /**
      * Handles any slave mappings between different vanilla registries.
      */
-    public static void registerSlaveMaps() {
+    protected static void registerSlaveMaps() {
         GeneralRegistrar.ELEMENT_SOUNDS.put(GeneralRegistrar.DRUMSTICK.get(), Util.make(new HashMap<>(), map -> {
             map.put(Blocks.OAK_LOG, GeneralRegistrar.DRUMSTICK_OAK_LOG_HIT.get());
             map.put(Blocks.BIRCH_LOG, GeneralRegistrar.DRUMSTICK_BIRCH_LOG_HIT.get());
