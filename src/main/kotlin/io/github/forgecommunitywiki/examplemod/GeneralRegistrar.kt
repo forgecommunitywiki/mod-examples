@@ -77,7 +77,7 @@ object GeneralRegistrar {
     val DRUMSTICK_WARPED_STEM_HIT = registerSoundEvent("instrument.drumstick.warped_stem")
 
     // Slave Maps
-    private val ELEMENT_SOUNDS: MutableMap<InstrumentElementItem, MutableMap<Block, SoundEvent>> = HashMap()
+    private val ELEMENT_SOUNDS: MutableMap<InstrumentElementItem, MutableMap<Block, SoundEvent>> = mutableMapOf()
 
     /**
     * Registers the {@link DeferredRegister}s to the event bus.
@@ -92,16 +92,16 @@ object GeneralRegistrar {
      * Handles any slave mappings between different vanilla registries.
      */
     fun registerSlaveMaps() {
-        ELEMENT_SOUNDS[DRUMSTICK.get()] = Util.make(HashMap()) { map ->
-            map[Blocks.OAK_LOG] = DRUMSTICK_OAK_LOG_HIT.get()
-            map[Blocks.BIRCH_LOG] = DRUMSTICK_BIRCH_LOG_HIT.get()
-            map[Blocks.SPRUCE_LOG] = DRUMSTICK_SPRUCE_LOG_HIT.get()
-            map[Blocks.JUNGLE_LOG] = DRUMSTICK_JUNGLE_LOG_HIT.get()
-            map[Blocks.ACACIA_LOG] = DRUMSTICK_ACACIA_LOG_HIT.get()
-            map[Blocks.DARK_OAK_LOG] = DRUMSTICK_DARK_OAK_LOG_HIT.get()
-            map[Blocks.CRIMSON_STEM] = DRUMSTICK_CRIMSON_STEM_HIT.get()
-            map[Blocks.WARPED_STEM] = DRUMSTICK_WARPED_STEM_HIT.get()
-        }
+        ELEMENT_SOUNDS[DRUMSTICK.get()] = mutableMapOf(
+            Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
+            Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
+            Blocks.SPRUCE_LOG to DRUMSTICK_SPRUCE_LOG_HIT.get(),
+            Blocks.JUNGLE_LOG to DRUMSTICK_JUNGLE_LOG_HIT.get(),
+            Blocks.ACACIA_LOG to DRUMSTICK_ACACIA_LOG_HIT.get(),
+            Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
+            Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
+            Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get(),
+        )
     }
 
     /**

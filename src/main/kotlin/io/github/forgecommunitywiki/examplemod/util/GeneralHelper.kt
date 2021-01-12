@@ -54,11 +54,9 @@ internal object GeneralHelper {
      * @return                      A codec for the specific registry
      * @throws NullPointerException If the registry is null
      */
-    fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V> {
-        Objects.requireNonNull(registry)
-        return ResourceLocation.CODEC.comapFlatMap({ loc ->
+    fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V>
+        = ResourceLocation.CODEC.comapFlatMap({ loc ->
             if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
             else DataResult.error("Not a valid registry object within " + registry.registryName + ": " + loc)
         }, IForgeRegistryEntry<V>::getRegistryName)
-    }
 }
