@@ -27,16 +27,9 @@ package io.github.forgecommunitywiki.examplemod.client
 import net.minecraftforge.eventbus.api.IEventBus
 
 /**
- * Handles all physical client related data and events.
- * Created as an object as the class is singleton in all cases.
+ * Registers client events to the specified buses.
+ *
+ * @param mod The mod event bus
+ * @param forge The forge event bus
  */
-internal object ClientHandler {
-
-    /**
-     * Registers client events to the specified buses.
-     *
-     * @param mod The mod event bus
-     * @param forge The forge event bus
-     */
-    fun init(mod: IEventBus, forge: IEventBus) {}
-}
+internal fun initClient(mod: IEventBus, forge: IEventBus) {}

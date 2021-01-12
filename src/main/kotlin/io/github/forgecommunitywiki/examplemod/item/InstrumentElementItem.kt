@@ -24,7 +24,7 @@
 
 package io.github.forgecommunitywiki.examplemod.item
 
-import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
+import io.github.forgecommunitywiki.examplemod.getInstrumentElementSounds
 import net.minecraft.item.Item
 import net.minecraft.item.ItemUseContext
 import net.minecraft.util.ActionResultType
@@ -44,7 +44,7 @@ open class InstrumentElementItem(properties: Properties) : Item(properties) {
     override fun onItemUse(context: ItemUseContext): ActionResultType {
         val world = context.world
         val pos = context.pos
-        return GeneralRegistrar.getInstrumentElementSounds(this, world.getBlockState(pos).block)?.let {
+        return getInstrumentElementSounds(this, world.getBlockState(pos).block)?.let {
             world.playSound(context.player, pos, it, SoundCategory.BLOCKS, 0.1f,
                 2.0.pow((random.nextInt(24) - 12) / 12.0).toFloat())
             ActionResultType.func_233537_a_(world.isRemote)

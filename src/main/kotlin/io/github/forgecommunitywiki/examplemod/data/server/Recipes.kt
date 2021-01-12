@@ -24,7 +24,7 @@
 
 package io.github.forgecommunitywiki.examplemod.data.server
 
-import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.IFinishedRecipe
 import net.minecraft.data.RecipeProvider
@@ -39,7 +39,7 @@ import java.util.function.Consumer
 internal class Recipes(generator: DataGenerator) : RecipeProvider(generator) {
 
     override fun registerRecipes(consumer: Consumer<IFinishedRecipe>) {
-        ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.DRUMSTICK.get())
+        ShapedRecipeBuilder.shapedRecipe(DRUMSTICK.get())
             .patternLine("  X")
             .patternLine(" X ")
             .patternLine("X  ")

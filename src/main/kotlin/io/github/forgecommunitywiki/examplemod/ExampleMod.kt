@@ -24,7 +24,7 @@
 
 package io.github.forgecommunitywiki.examplemod
 
-import io.github.forgecommunitywiki.examplemod.client.ClientHandler
+import io.github.forgecommunitywiki.examplemod.client.initClient
 import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
 import io.github.forgecommunitywiki.examplemod.data.client.Localizations
 import io.github.forgecommunitywiki.examplemod.data.server.Recipes
@@ -35,13 +35,17 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
-import java.util.stream.Stream
+
+/**
+ * The id or namespace associated with this mod.
+ */
+internal const val MOD_ID = "examplemod"
 
 /**
  * The main class used to handle any registration or common events associated
  * with the mod.
  */
-@Mod(ExampleMod.ID)
+@Mod(MOD_ID)
 internal class ExampleMod {
 
     init {
@@ -49,10 +53,10 @@ internal class ExampleMod {
         val forge = MinecraftForge.EVENT_BUS
 
         // Initialize physical client
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { ClientHandler.init(mod, forge) } }
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { initClient(mod, forge) } }
 
         // Initialize registries
-        GeneralRegistrar.register(mod)
+        register(mod)
 
         // Attach common events
         mod.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
@@ -67,7 +71,7 @@ internal class ExampleMod {
      * @param event The common setup event
      */
     private fun commonSetup(event: FMLCommonSetupEvent) {
-        event.enqueueWork(GeneralRegistrar::registerSlaveMaps)
+        event.enqueueWork { registerSlaveMaps() }
     }
 
     /**
@@ -85,12 +89,5 @@ internal class ExampleMod {
         if(event.includeServer()) {
             gen.addProvider(Recipes(gen))
         }
-    }
-
-    companion object {
-        /**
-         * The id or namespace associated with this mod.
-         */
-        const val ID = "examplemod"
     }
 }

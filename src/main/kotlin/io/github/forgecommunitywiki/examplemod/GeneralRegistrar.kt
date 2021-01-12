@@ -36,80 +36,74 @@ import net.minecraftforge.fml.RegistryObject
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 
-/**
- * A class used to handle all registry objects added by this mod.
- */
-object GeneralRegistrar {
+// Registers
+private val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID)
+private val ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID)
+private val SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MOD_ID)
 
-    // Registers
-    private val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ExampleMod.ID)
-    private val ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ExampleMod.ID)
-    private val SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ExampleMod.ID)
-
-    // Items
-    val DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("drumstick")
-        { object : InstrumentElementItem(Properties().group(ItemGroup.MISC).maxStackSize(2)) {
-            /**
-             * We implement the burn time here instead of as a method in the class as its
-             * completely unrelated to any data stored inside. It should be more of an item
-             * property, but since this is not the case, an anonymous class that adds the
-             * parameter when needed will work as well.
-             *
-             * @param  stack The stack being smelted
-             * @return       The burn time of the item in ticks
-             */
-            override fun getBurnTime(stack: ItemStack?): Int {
-                return 300
-            }
-        } }
-
-    // Sound Events
-    val DRUMSTICK_OAK_LOG_HIT = registerSoundEvent("instrument.drumstick.oak_log")
-    val DRUMSTICK_BIRCH_LOG_HIT = registerSoundEvent("instrument.drumstick.birch_log")
-    val DRUMSTICK_SPRUCE_LOG_HIT = registerSoundEvent("instrument.drumstick.spruce_log")
-    val DRUMSTICK_JUNGLE_LOG_HIT = registerSoundEvent("instrument.drumstick.jungle_log")
-    val DRUMSTICK_ACACIA_LOG_HIT = registerSoundEvent("instrument.drumstick.acacia_log")
-    val DRUMSTICK_DARK_OAK_LOG_HIT = registerSoundEvent("instrument.drumstick.dark_oak_log")
-    val DRUMSTICK_CRIMSON_STEM_HIT = registerSoundEvent("instrument.drumstick.crimson_stem")
-    val DRUMSTICK_WARPED_STEM_HIT = registerSoundEvent("instrument.drumstick.warped_stem")
-
-    // Slave Maps
-    private val ELEMENT_SOUNDS: MutableMap<InstrumentElementItem, MutableMap<Block, SoundEvent>> = mutableMapOf()
-
+// Items
+val DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("drumstick")
+{ object : InstrumentElementItem(Properties().group(ItemGroup.MISC).maxStackSize(2)) {
     /**
-    * Registers the {@link DeferredRegister}s to the event bus.
-    */
-    internal fun register(modBus: IEventBus) {
-        BLOCKS.register(modBus)
-        ITEMS.register(modBus)
-        SOUND_EVENTS.register(modBus)
-    }
-
-    /**
-     * Handles any slave mappings between different vanilla registries.
-     */
-    internal fun registerSlaveMaps() {
-        ELEMENT_SOUNDS[DRUMSTICK.get()] = mutableMapOf(
-            Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
-            Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
-            Blocks.SPRUCE_LOG to DRUMSTICK_SPRUCE_LOG_HIT.get(),
-            Blocks.JUNGLE_LOG to DRUMSTICK_JUNGLE_LOG_HIT.get(),
-            Blocks.ACACIA_LOG to DRUMSTICK_ACACIA_LOG_HIT.get(),
-            Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
-            Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
-            Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get(),
-        )
-    }
-
-    /**
-     * Helper method to create a sound event as the names can be equivalent.
+     * We implement the burn time here instead of as a method in the class as its
+     * completely unrelated to any data stored inside. It should be more of an item
+     * property, but since this is not the case, an anonymous class that adds the
+     * parameter when needed will work as well.
      *
-     * @param  name The sound name as dictated within {@code sounds.json}.
-     * @return      The sound event registry object
+     * @param  stack The stack being smelted
+     * @return       The burn time of the item in ticks
      */
-    private fun registerSoundEvent(name: String) : RegistryObject<SoundEvent>
-        = SOUND_EVENTS.register(name) { SoundEvent(ResourceLocation(ExampleMod.ID, name)) }
+    override fun getBurnTime(stack: ItemStack?): Int {
+        return 300
+    }
+} }
 
-    fun getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): SoundEvent?
-        = ELEMENT_SOUNDS.getOrDefault(item, mapOf())[hitBlock]
+// Sound Events
+val DRUMSTICK_OAK_LOG_HIT = registerSoundEvent("instrument.drumstick.oak_log")
+val DRUMSTICK_BIRCH_LOG_HIT = registerSoundEvent("instrument.drumstick.birch_log")
+val DRUMSTICK_SPRUCE_LOG_HIT = registerSoundEvent("instrument.drumstick.spruce_log")
+val DRUMSTICK_JUNGLE_LOG_HIT = registerSoundEvent("instrument.drumstick.jungle_log")
+val DRUMSTICK_ACACIA_LOG_HIT = registerSoundEvent("instrument.drumstick.acacia_log")
+val DRUMSTICK_DARK_OAK_LOG_HIT = registerSoundEvent("instrument.drumstick.dark_oak_log")
+val DRUMSTICK_CRIMSON_STEM_HIT = registerSoundEvent("instrument.drumstick.crimson_stem")
+val DRUMSTICK_WARPED_STEM_HIT = registerSoundEvent("instrument.drumstick.warped_stem")
+
+// Slave Maps
+private val ELEMENT_SOUNDS: MutableMap<InstrumentElementItem, MutableMap<Block, SoundEvent>> = mutableMapOf()
+
+/**
+ * Registers the {@link DeferredRegister}s to the event bus.
+ */
+internal fun register(modBus: IEventBus) {
+    BLOCKS.register(modBus)
+    ITEMS.register(modBus)
+    SOUND_EVENTS.register(modBus)
 }
+
+/**
+ * Handles any slave mappings between different vanilla registries.
+ */
+internal fun registerSlaveMaps() {
+    ELEMENT_SOUNDS[DRUMSTICK.get()] = mutableMapOf(
+        Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
+        Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
+        Blocks.SPRUCE_LOG to DRUMSTICK_SPRUCE_LOG_HIT.get(),
+        Blocks.JUNGLE_LOG to DRUMSTICK_JUNGLE_LOG_HIT.get(),
+        Blocks.ACACIA_LOG to DRUMSTICK_ACACIA_LOG_HIT.get(),
+        Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
+        Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
+        Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get(),
+    )
+}
+
+/**
+ * Helper method to create a sound event as the names can be equivalent.
+ *
+ * @param  name The sound name as dictated within {@code sounds.json}.
+ * @return      The sound event registry object
+ */
+private fun registerSoundEvent(name: String) : RegistryObject<SoundEvent>
+        = SOUND_EVENTS.register(name) { SoundEvent(ResourceLocation(MOD_ID, name)) }
+
+fun getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): SoundEvent?
+        = ELEMENT_SOUNDS.getOrDefault(item, mapOf())[hitBlock]

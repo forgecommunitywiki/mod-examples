@@ -24,8 +24,8 @@
 
 package io.github.forgecommunitywiki.examplemod.data.client
 
-import io.github.forgecommunitywiki.examplemod.ExampleMod
-import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.MOD_ID
 import net.minecraft.data.DataGenerator
 import net.minecraft.item.Item
 import net.minecraft.util.ResourceLocation
@@ -40,15 +40,18 @@ import java.util.function.Supplier
  * provider.
  */
 internal class ItemModels(generator: DataGenerator, existingFileHelper: ExistingFileHelper)
-    : ItemModelProvider(generator, ExampleMod.ID, existingFileHelper) {
+    : ItemModelProvider(generator, MOD_ID, existingFileHelper) {
 
     override fun registerModels() {
-        simpleItem(GeneralRegistrar.DRUMSTICK)
+        simpleItem(DRUMSTICK)
     }
 
     /**
      * Adds a simple item to be generated. It creates an {@code item/generated}
      * model with the base texture pointing to its registry name representation.
+     *
+     * We do not use () -> Item here as in the Kotlin language due to the
+     * {@code RegistryObject} wrapper.
      *
      * @param itemSupplier The item to generate the model for
      */

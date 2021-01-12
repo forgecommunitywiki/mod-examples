@@ -24,8 +24,8 @@
 
 package io.github.forgecommunitywiki.examplemod.data.client
 
-import io.github.forgecommunitywiki.examplemod.ExampleMod
-import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
+import io.github.forgecommunitywiki.examplemod.*
+import io.github.forgecommunitywiki.examplemod.MOD_ID
 import net.minecraft.data.DataGenerator
 import net.minecraft.util.SoundEvent
 import net.minecraftforge.common.data.LanguageProvider
@@ -37,20 +37,20 @@ import java.util.function.Supplier
  * one file.
  */
 internal class Localizations(gen: DataGenerator, locale: String)
-    : LanguageProvider(gen, ExampleMod.ID, locale) {
+    : LanguageProvider(gen, MOD_ID, locale) {
 
     override fun addTranslations() {
         when(name.replace("Languages: ", "")) {
             "en_us" -> {
-                this.addItem(GeneralRegistrar.DRUMSTICK, "Drumstick")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_OAK_LOG_HIT, "Drumstick Hits Oak Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_BIRCH_LOG_HIT, "Drumstick Hits Birch Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_SPRUCE_LOG_HIT, "Drumstick Hits Spruce Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_JUNGLE_LOG_HIT, "Drumstick Hits Jungle Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_ACACIA_LOG_HIT, "Drumstick Hits Acacia Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_DARK_OAK_LOG_HIT, "Drumstick Hits Dark Oak Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_CRIMSON_STEM_HIT, "Drumstick Hits Crimson Stem")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_WARPED_STEM_HIT, "Drumstick Hits Warped Stem")
+                this.addItem(DRUMSTICK, "Drumstick")
+                this.addSoundEventSubtitle(DRUMSTICK_OAK_LOG_HIT, "Drumstick Hits Oak Log")
+                this.addSoundEventSubtitle(DRUMSTICK_BIRCH_LOG_HIT, "Drumstick Hits Birch Log")
+                this.addSoundEventSubtitle(DRUMSTICK_SPRUCE_LOG_HIT, "Drumstick Hits Spruce Log")
+                this.addSoundEventSubtitle(DRUMSTICK_JUNGLE_LOG_HIT, "Drumstick Hits Jungle Log")
+                this.addSoundEventSubtitle(DRUMSTICK_ACACIA_LOG_HIT, "Drumstick Hits Acacia Log")
+                this.addSoundEventSubtitle(DRUMSTICK_DARK_OAK_LOG_HIT, "Drumstick Hits Dark Oak Log")
+                this.addSoundEventSubtitle(DRUMSTICK_CRIMSON_STEM_HIT, "Drumstick Hits Crimson Stem")
+                this.addSoundEventSubtitle(DRUMSTICK_WARPED_STEM_HIT, "Drumstick Hits Warped Stem")
             }
         }
     }

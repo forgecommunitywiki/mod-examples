@@ -24,6 +24,7 @@
 
 package io.github.forgecommunitywiki.examplemod.util
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
@@ -31,28 +32,23 @@ import net.minecraft.util.ResourceLocation
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
 import java.util.*
+import java.util.function.Supplier
 
 /**
- * Holds non-specific utilities used within the mod.
+ * Global gson instance.
  */
-internal object GeneralHelper {
+internal val GSON: Gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
 
-    /**
-     * Global gson instance.
-     */
-    val GSON = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()!!
-
-    /**
-     * Creates a codec that converts a string to the specified registry.
-     *
-     * @param  <V>                  A forge supported registry entry type
-     * @param  registry             The forge registry
-     * @return                      A codec for the specific registry
-     * @throws NullPointerException If the registry is null
-     */
-    fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V>
+/**
+ * Creates a codec that converts a string to the specified registry.
+ *
+ * @param  <V>                  A forge supported registry entry type
+ * @param  registry             The forge registry
+ * @return                      A codec for the specific registry
+ * @throws NullPointerException If the registry is null
+ */
+internal fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V>
         = ResourceLocation.CODEC.comapFlatMap({ loc ->
-            if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
-            else DataResult.error("Not a valid registry object within " + registry.registryName + ": " + loc)
-        }, IForgeRegistryEntry<V>::getRegistryName)
-}
+    if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
+    else DataResult.error("Not a valid registry object within " + registry.registryName + ": " + loc)
+}, IForgeRegistryEntry<V>::getRegistryName)
