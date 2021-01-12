@@ -1,0 +1,50 @@
+{
+    "instrument.drumstick.oak_log": {
+        "subtitle": "examplemod.instrument.drumstick.oak_log",
+        "sounds": [
+            "examplemod:drumstick/oak_log"
+        ]
+    },
+    "instrument.drumstick.birch_log": {
+        "subtitle": "examplemod.instrument.drumstick.birch_log",
+        "sounds": [
+            "examplemod:drumstick/birch_log"
+        ]
+    },
+    "instrument.drumstick.jungle_log": {
+        "subtitle": "examplemod.instrument.drumstick.jungle_log",
+        "sounds": [
+            "examplemod:drumstick/jungle_log"
+        ]
+    },
+    "instrument.drumstick.acacia_log": {
+        "subtitle": "examplemod.instrument.drumstick.acacia_log",
+        "sounds": [
+            "examplemod:drumstick/acacia_log"
+        ]
+    },
+    "instrument.drumstick.dark_oak_log": {
+        "subtitle": "examplemod.instrument.drumstick.dark_oak_log",
+        "sounds": [
+            "examplemod:drumstick/dark_oak_log"
+        ]
+    },
+    "instrument.drumstick.spruce_log": {
+        "subtitle": "examplemod.instrument.drumstick.spruce_log",
+        "sounds": [
+            "examplemod:drumstick/spruce_log"
+        ]
+    },
+    "instrument.drumstick.crimson_stem": {
+        "subtitle": "examplemod.instrument.drumstick.crimson_stem",
+        "sounds": [
+            "examplemod:drumstick/crimson_stem"
+        ]
+    },
+    "instrument.drumstick.warped_stem": {
+        "subtitle": "examplemod.instrument.drumstick.warped_stem",
+        "sounds": [
+            "examplemod:drumstick/warped_stem"
+        ]
+    }
+}

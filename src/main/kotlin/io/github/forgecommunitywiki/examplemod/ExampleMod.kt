@@ -24,7 +24,18 @@
 
 package io.github.forgecommunitywiki.examplemod
 
+import io.github.forgecommunitywiki.examplemod.client.ClientHandler
+import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
+import io.github.forgecommunitywiki.examplemod.data.client.Localizations
+import io.github.forgecommunitywiki.examplemod.data.server.Recipes
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import java.util.stream.Stream
 
 /**
  * The main class used to handle any registration or common events associated
@@ -32,10 +43,53 @@ import net.minecraftforge.fml.common.Mod
  */
 @Mod(ExampleMod.ID)
 internal class ExampleMod {
+
+    init {
+        val mod = FMLJavaModLoadingContext.get().modEventBus
+        val forge = MinecraftForge.EVENT_BUS
+
+        // Initialize physical client
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT) { Runnable { ClientHandler.init(mod, forge) } }
+
+        // Initialize registries
+        GeneralRegistrar.register(mod)
+
+        // Attach common events
+        mod.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
+        mod.addListener { event: GatherDataEvent -> attachProviders(event) }
+    }
+
+    /**
+     * Handles items that should occur directly after registry events including map
+     * introductions and vanilla registrations. Only add if {@link InterModComms},
+     * will not be needed. Otherwise, use {@link FMLLoadCompleteEvent}.
+     *
+     * @param event The common setup event
+     */
+    private fun commonSetup(event: FMLCommonSetupEvent) {
+        event.enqueueWork(GeneralRegistrar::registerSlaveMaps)
+    }
+
+    /**
+     * Attaches all providers to be used with data generation.
+     *
+     * @param event The data generator event
+     */
+    private fun attachProviders(event: GatherDataEvent) {
+        val gen = event.generator
+        val helper = event.existingFileHelper
+        if(event.includeClient()) {
+            Stream.of("en_us").forEach { locale -> gen.addProvider(Localizations(gen, locale)) }
+            gen.addProvider(ItemModels(gen, helper))
+        }
+        if(event.includeServer())
+            gen.addProvider(Recipes(gen))
+    }
+
     companion object {
         /**
          * The id or namespace associated with this mod.
          */
-        const val ID: String = "examplemod"
+        const val ID = "examplemod"
     }
 }
