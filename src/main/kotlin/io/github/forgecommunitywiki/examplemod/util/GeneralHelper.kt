@@ -41,10 +41,6 @@ internal object GeneralHelper {
      * Global gson instance.
      */
     val GSON = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()!!
-    /**
-     * General random used for this mod.
-     */
-    val RANDOM = Random()
 
     /**
      * Creates a codec that converts a string to the specified registry.

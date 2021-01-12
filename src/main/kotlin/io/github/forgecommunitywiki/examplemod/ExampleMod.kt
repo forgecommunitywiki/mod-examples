@@ -79,11 +79,12 @@ internal class ExampleMod {
         val gen = event.generator
         val helper = event.existingFileHelper
         if(event.includeClient()) {
-            Stream.of("en_us").forEach { locale -> gen.addProvider(Localizations(gen, locale)) }
+           sequenceOf("en_us").forEach { locale -> gen.addProvider(Localizations(gen, locale)) }
             gen.addProvider(ItemModels(gen, helper))
         }
-        if(event.includeServer())
+        if(event.includeServer()) {
             gen.addProvider(Recipes(gen))
+        }
     }
 
     companion object {

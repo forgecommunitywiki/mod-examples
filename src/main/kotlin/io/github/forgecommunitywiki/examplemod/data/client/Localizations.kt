@@ -52,7 +52,6 @@ internal class Localizations(gen: DataGenerator, locale: String)
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_CRIMSON_STEM_HIT, "Drumstick Hits Crimson Stem")
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_WARPED_STEM_HIT, "Drumstick Hits Warped Stem")
             }
-            else -> {}
         }
     }
 

@@ -31,13 +31,10 @@ import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.SoundEvent
-import net.minecraft.util.Util
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.RegistryObject
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
-import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * A class used to handle all registry objects added by this mod.
@@ -82,7 +79,7 @@ object GeneralRegistrar {
     /**
     * Registers the {@link DeferredRegister}s to the event bus.
     */
-    fun register(modBus: IEventBus) {
+    internal fun register(modBus: IEventBus) {
         BLOCKS.register(modBus)
         ITEMS.register(modBus)
         SOUND_EVENTS.register(modBus)
@@ -91,7 +88,7 @@ object GeneralRegistrar {
     /**
      * Handles any slave mappings between different vanilla registries.
      */
-    fun registerSlaveMaps() {
+    internal fun registerSlaveMaps() {
         ELEMENT_SOUNDS[DRUMSTICK.get()] = mutableMapOf(
             Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
             Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
@@ -114,5 +111,5 @@ object GeneralRegistrar {
         = SOUND_EVENTS.register(name) { SoundEvent(ResourceLocation(ExampleMod.ID, name)) }
 
     fun getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): SoundEvent?
-        = ELEMENT_SOUNDS.getOrDefault(item, Collections.emptyMap()).getOrDefault(hitBlock, null)
+        = ELEMENT_SOUNDS.getOrDefault(item, mapOf())[hitBlock]
 }

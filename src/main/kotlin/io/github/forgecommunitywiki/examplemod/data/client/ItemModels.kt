@@ -55,6 +55,6 @@ internal class ItemModels(generator: DataGenerator, existingFileHelper: Existing
     private fun simpleItem(itemSupplier: Supplier<out Item>) {
         val location = itemSupplier.get().registryName!!
         this.getBuilder(location.toString()).parent(ModelFile.UncheckedModelFile("item/generated"))
-            .texture("layer0", ResourceLocation(location.namespace, ITEM_FOLDER + "/" + location.path))
+            .texture("layer0", ResourceLocation(location.namespace, "${ITEM_FOLDER}/${location.path}"))
     }
 }

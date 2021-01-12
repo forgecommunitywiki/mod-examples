@@ -36,7 +36,7 @@ import java.util.function.Consumer
  * A provider used to generate recipes for items within the game. It will create
  * the associated advancement as well.
  */
-class Recipes(generator: DataGenerator) : RecipeProvider(generator) {
+internal class Recipes(generator: DataGenerator) : RecipeProvider(generator) {
 
     override fun registerRecipes(consumer: Consumer<IFinishedRecipe>) {
         ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.DRUMSTICK.get())

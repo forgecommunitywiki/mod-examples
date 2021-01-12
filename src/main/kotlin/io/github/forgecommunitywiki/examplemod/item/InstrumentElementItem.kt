@@ -25,12 +25,10 @@
 package io.github.forgecommunitywiki.examplemod.item
 
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
-import io.github.forgecommunitywiki.examplemod.util.GeneralHelper
 import net.minecraft.item.Item
 import net.minecraft.item.ItemUseContext
 import net.minecraft.util.ActionResultType
 import net.minecraft.util.SoundCategory
-import java.util.*
 import kotlin.math.pow
 
 
@@ -46,10 +44,10 @@ open class InstrumentElementItem(properties: Properties) : Item(properties) {
     override fun onItemUse(context: ItemUseContext): ActionResultType {
         val world = context.world
         val pos = context.pos
-        return Optional.ofNullable(GeneralRegistrar.getInstrumentElementSounds(this, world.getBlockState(pos).block)).map { sound ->
-            world.playSound(context.player, pos, sound, SoundCategory.BLOCKS, 0.1f,
-                2.0.pow((GeneralHelper.RANDOM.nextInt(24) - 12) / 12.0).toFloat())
+        return GeneralRegistrar.getInstrumentElementSounds(this, world.getBlockState(pos).block)?.let {
+            world.playSound(context.player, pos, it, SoundCategory.BLOCKS, 0.1f,
+                2.0.pow((random.nextInt(24) - 12) / 12.0).toFloat())
             ActionResultType.func_233537_a_(world.isRemote)
-        }.orElse(super.onItemUse(context))
+        } ?: super.onItemUse(context)
     }
 }
