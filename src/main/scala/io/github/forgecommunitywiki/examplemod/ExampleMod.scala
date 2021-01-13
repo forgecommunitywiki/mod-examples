@@ -25,6 +25,16 @@
 package io.github.forgecommunitywiki.examplemod
 
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import net.minecraft.client.Minecraft
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.DistExecutor
+import net.minecraftforge.api.distmarker.Dist
+import io.github.forgecommunitywiki.examplemod.client.ClientHandler
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent
+import io.github.forgecommunitywiki.examplemod.data.server.Recipes
+import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
+import io.github.forgecommunitywiki.examplemod.data.client.Localizations
 
 /**
  * The main class used to handle any registration or common events associated
@@ -33,6 +43,34 @@ import net.minecraftforge.fml.common.Mod
 @Mod(ExampleMod.ID)
 class ExampleMod {
 
+    private val mod = FMLJavaModLoadingContext.get().getModEventBus()
+    private val forge = MinecraftForge.EVENT_BUS
+
+    // Initialize physical client
+    DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () => () => ClientHandler.init(mod, forge))
+
+    // Initialize registries
+    GeneralRegistrar.register(mod)
+
+    // Attach common events
+    mod.addListener((event: GatherDataEvent) => this.attachProviders(event))
+
+    /**
+     * Attaches all providers to be used with data generation.
+     *
+     * @param event The data generator event
+     */
+    private def attachProviders(event: GatherDataEvent) = {
+        val gen = event.getGenerator()
+        val helper = event.getExistingFileHelper()
+        if(event.includeClient()) {
+            ("en_us" #:: LazyList.empty).foreach(locale => gen.addProvider(new Localizations(gen, locale)))
+            gen.addProvider(new ItemModels(gen, helper))
+        }
+        if(event.includeServer()) {
+            gen.addProvider(new Recipes(gen))
+        }
+    }
 }
 object ExampleMod {
     /**
