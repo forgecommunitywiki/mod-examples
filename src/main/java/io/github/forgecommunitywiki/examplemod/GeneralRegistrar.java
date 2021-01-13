@@ -26,8 +26,6 @@ package io.github.forgecommunitywiki.examplemod;
 
 import java.util.*;
 
-import javax.annotation.Nullable;
-
 import io.github.forgecommunitywiki.examplemod.item.InstrumentElementItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -133,10 +131,11 @@ public final class GeneralRegistrar {
      *
      * @param  item     The item hitting the block
      * @param  hitBlock The block being hit
-     * @return          The sound played if the block is hit, null otherwise
+     * @return          The sound played if the block is hit, an optional otherwise
      */
-    @Nullable
-    public static SoundEvent getInstrumentElementSounds(final InstrumentElementItem item, final Block hitBlock) {
-        return GeneralRegistrar.ELEMENT_SOUNDS.getOrDefault(item, Collections.emptyMap()).getOrDefault(hitBlock, null);
+    public static Optional<SoundEvent> getInstrumentElementSounds(final InstrumentElementItem item,
+            final Block hitBlock) {
+        return Optional
+                .ofNullable(GeneralRegistrar.ELEMENT_SOUNDS.getOrDefault(item, Collections.emptyMap()).get(hitBlock));
     }
 }
