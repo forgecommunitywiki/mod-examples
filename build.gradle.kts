@@ -129,6 +129,9 @@ tasks {
                     "Implementation-Timestamp" to DateTimeFormatter.ISO_INSTANT.format(Instant.now())
             )
         }
+
+        // This is the preferred method to reobfuscate your jar file
+        finalizedBy("reobfJar")
     }
 }
 
