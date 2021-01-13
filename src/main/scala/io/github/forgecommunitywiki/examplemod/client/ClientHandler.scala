@@ -37,5 +37,5 @@ object ClientHandler {
     * @param mod The mod event bus
     * @param forge The forge event bus
     */
-    def init(mod: IEventBus, forge: IEventBus) = {}
+    def init(mod: IEventBus, forge: IEventBus): Unit = {}
 }

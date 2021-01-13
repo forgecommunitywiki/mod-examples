@@ -38,7 +38,7 @@ import net.minecraft.item.Items
  */
 class Recipes(generator: DataGenerator) extends RecipeProvider(generator) {
 
-    override protected def registerRecipes(consumer: Consumer[IFinishedRecipe]) = {
+    override protected def registerRecipes(consumer: Consumer[IFinishedRecipe]): Unit = {
         ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.DRUMSTICK.get())
             .patternLine("  X")
             .patternLine(" X ")

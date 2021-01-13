@@ -39,7 +39,7 @@ import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
 class Localizations(gen: DataGenerator, locale: String)
     extends LanguageProvider(gen, ExampleMod.ID, locale) {
 
-    override protected def addTranslations()
+    override protected def addTranslations(): Unit
         = getName().replace("Languages: ", "") match {
             case "en_us" => {
                 this.addItem(GeneralRegistrar.DRUMSTICK, "Drumstick")
@@ -64,6 +64,6 @@ class Localizations(gen: DataGenerator, locale: String)
      * @param key   The sound event to add a subtitle for
      * @param value The localized subtitle
      */
-    protected def addSoundEventSubtitle(key: Supplier[SoundEvent], value: String)
+    protected def addSoundEventSubtitle(key: Supplier[SoundEvent], value: String): Unit
         = add(key.get().getRegistryName().toString().replace(':', '.'), value)
 }

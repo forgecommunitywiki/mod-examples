@@ -53,14 +53,14 @@ class ExampleMod {
     GeneralRegistrar.register(mod)
 
     // Attach common events
-    mod.addListener((event: GatherDataEvent) => this.attachProviders(event))
+    mod.addListener(this.attachProviders)
 
     /**
      * Attaches all providers to be used with data generation.
      *
      * @param event The data generator event
      */
-    private def attachProviders(event: GatherDataEvent) = {
+    private def attachProviders(event: GatherDataEvent): Unit = {
         val gen = event.getGenerator()
         val helper = event.getExistingFileHelper()
         if(event.includeClient()) {

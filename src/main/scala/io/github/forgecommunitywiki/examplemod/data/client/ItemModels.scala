@@ -43,7 +43,7 @@ import net.minecraftforge.client.model.generators.ModelProvider
 class ItemModels(generator: DataGenerator, existingFileHelper: ExistingFileHelper)
     extends ItemModelProvider(generator, ExampleMod.ID, existingFileHelper) {
 
-    override protected def registerModels() = {
+    override protected def registerModels(): Unit = {
         simpleItem(GeneralRegistrar.DRUMSTICK)
     }
 

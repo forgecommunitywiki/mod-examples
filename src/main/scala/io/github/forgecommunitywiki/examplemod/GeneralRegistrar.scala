@@ -91,7 +91,7 @@ object GeneralRegistrar {
      *
      * @param modBus The associated mod event bus
      */
-    def register(modBus: IEventBus) = {
+    def register(modBus: IEventBus): Unit = {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         SOUND_EVENTS.register(modBus);
