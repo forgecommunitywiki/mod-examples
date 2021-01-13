@@ -39,7 +39,7 @@ import java.util.function.Supplier
 internal class Localizations(gen: DataGenerator, locale: String)
     : LanguageProvider(gen, MOD_ID, locale) {
 
-    override fun addTranslations() {
+    override fun addTranslations() =
         when(name.replace("Languages: ", "")) {
             "en_us" -> {
                 this.addItem(DRUMSTICK, "Drumstick")
@@ -52,8 +52,9 @@ internal class Localizations(gen: DataGenerator, locale: String)
                 this.addSoundEventSubtitle(DRUMSTICK_CRIMSON_STEM_HIT, "Drumstick Hits Crimson Stem")
                 this.addSoundEventSubtitle(DRUMSTICK_WARPED_STEM_HIT, "Drumstick Hits Warped Stem")
             }
+            else -> {}
         }
-    }
+
 
     /**
      * Adds a sound event subtitle by concatenating the namespace and path of

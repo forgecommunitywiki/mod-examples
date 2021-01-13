@@ -53,9 +53,7 @@ val DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("drumstick
      * @param  stack The stack being smelted
      * @return       The burn time of the item in ticks
      */
-    override fun getBurnTime(stack: ItemStack?): Int {
-        return 300
-    }
+    override fun getBurnTime(stack: ItemStack?): Int = 300
 } }
 
 // Sound Events
@@ -69,7 +67,16 @@ val DRUMSTICK_CRIMSON_STEM_HIT = registerSoundEvent("instrument.drumstick.crimso
 val DRUMSTICK_WARPED_STEM_HIT = registerSoundEvent("instrument.drumstick.warped_stem")
 
 // Slave Maps
-private val ELEMENT_SOUNDS: MutableMap<InstrumentElementItem, MutableMap<Block, SoundEvent>> = mutableMapOf()
+private val ELEMENT_SOUNDS by lazy { mapOf(DRUMSTICK.get() to mapOf(
+    Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
+    Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
+    Blocks.SPRUCE_LOG to DRUMSTICK_SPRUCE_LOG_HIT.get(),
+    Blocks.JUNGLE_LOG to DRUMSTICK_JUNGLE_LOG_HIT.get(),
+    Blocks.ACACIA_LOG to DRUMSTICK_ACACIA_LOG_HIT.get(),
+    Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
+    Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
+    Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get()
+)) }
 
 /**
  * Registers the {@link DeferredRegister}s to the event bus.
@@ -81,22 +88,6 @@ internal fun register(modBus: IEventBus) {
 }
 
 /**
- * Handles any slave mappings between different vanilla registries.
- */
-internal fun registerSlaveMaps() {
-    ELEMENT_SOUNDS[DRUMSTICK.get()] = mutableMapOf(
-        Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
-        Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
-        Blocks.SPRUCE_LOG to DRUMSTICK_SPRUCE_LOG_HIT.get(),
-        Blocks.JUNGLE_LOG to DRUMSTICK_JUNGLE_LOG_HIT.get(),
-        Blocks.ACACIA_LOG to DRUMSTICK_ACACIA_LOG_HIT.get(),
-        Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
-        Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
-        Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get(),
-    )
-}
-
-/**
  * Helper method to create a sound event as the names can be equivalent.
  *
  * @param  name The sound name as dictated within {@code sounds.json}.
@@ -105,5 +96,13 @@ internal fun registerSlaveMaps() {
 private fun registerSoundEvent(name: String) : RegistryObject<SoundEvent>
         = SOUND_EVENTS.register(name) { SoundEvent(ResourceLocation(MOD_ID, name)) }
 
+/**
+ * Grabs the instrument element sound according to the block hit. Returns null
+ * if there is no sound present.
+ *
+ * @param  item     The item hitting the block
+ * @param  hitBlock The block being hit
+ * @return          The sound played if the block is hit, null otherwise
+ */
 fun getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): SoundEvent?
         = ELEMENT_SOUNDS.getOrDefault(item, mapOf())[hitBlock]

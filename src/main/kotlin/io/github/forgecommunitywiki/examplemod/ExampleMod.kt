@@ -59,19 +59,7 @@ internal class ExampleMod {
         register(mod)
 
         // Attach common events
-        mod.addListener { event: FMLCommonSetupEvent -> commonSetup(event) }
         mod.addListener { event: GatherDataEvent -> attachProviders(event) }
-    }
-
-    /**
-     * Handles items that should occur directly after registry events including map
-     * introductions and vanilla registrations. Only add if {@link InterModComms},
-     * will not be needed. Otherwise, use {@link FMLLoadCompleteEvent}.
-     *
-     * @param event The common setup event
-     */
-    private fun commonSetup(event: FMLCommonSetupEvent) {
-        event.enqueueWork { registerSlaveMaps() }
     }
 
     /**

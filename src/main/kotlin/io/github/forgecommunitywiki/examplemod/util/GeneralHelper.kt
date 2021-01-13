@@ -50,5 +50,5 @@ internal val GSON: Gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting(
 internal fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V>
         = ResourceLocation.CODEC.comapFlatMap({ loc ->
     if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
-    else DataResult.error("Not a valid registry object within " + registry.registryName + ": " + loc)
+    else DataResult.error("Not a valid registry object within ${registry.registryName}: $loc")
 }, IForgeRegistryEntry<V>::getRegistryName)
