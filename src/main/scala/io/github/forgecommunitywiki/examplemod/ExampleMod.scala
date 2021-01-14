@@ -35,6 +35,7 @@ import net.minecraftforge.fml.event.lifecycle.GatherDataEvent
 import io.github.forgecommunitywiki.examplemod.data.server.Recipes
 import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
 import io.github.forgecommunitywiki.examplemod.data.client.Localizations
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 
 /**
  * The main class used to handle any registration or common events associated
@@ -53,7 +54,19 @@ class ExampleMod {
     GeneralRegistrar.register(mod)
 
     // Attach common events
+    mod.addListener(this.commonSetup)
     mod.addListener(this.attachProviders)
+
+    /**
+     * Handles items that should occur directly after registry events including map
+     * introductions and vanilla registrations. Only add if {@link InterModComms},
+     * will not be needed. Otherwise, use {@link FMLLoadCompleteEvent}.
+     *
+     * @param event The common setup event
+     */
+    private def commonSetup(event: FMLCommonSetupEvent): Unit = {
+        GeneralRegistrar.registerSlaveMaps
+    }
 
     /**
      * Attaches all providers to be used with data generation.

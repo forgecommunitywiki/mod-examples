@@ -98,6 +98,16 @@ object GeneralRegistrar {
     }
 
     /**
+     * Handles any slave mappings between different vanilla registries.
+     *
+     * Does not need to be synchronized as the map is thread-safe and
+     * there are no modifications that can happen at this time.
+     */
+    def registerSlaveMaps(): Unit = {
+        ELEMENT_SOUNDS.values
+    }
+    
+    /**
      * Helper method to create a sound event as the names can be equivalent.
      *
      * @param  name The sound name as dictated within {@code sounds.json}.
