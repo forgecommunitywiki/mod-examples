@@ -24,7 +24,7 @@
 
 package io.github.forgecommunitywiki.examplemod.data.client
 
-import io.github.forgecommunitywiki.examplemod.DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.*
 import io.github.forgecommunitywiki.examplemod.MOD_ID
 import net.minecraft.data.DataGenerator
 import net.minecraft.item.Item
@@ -44,6 +44,10 @@ internal class ItemModels(generator: DataGenerator, existingFileHelper: Existing
 
     override fun registerModels() {
         simpleItem(DRUMSTICK)
+        simpleItem(CHICKEN_LEG)
+        simpleItem(COOKED_CHICKEN_LEG)
+        simpleItem(CHICKEN_DRUMSTICK)
+        simpleItem(COOKED_CHICKEN_DRUMSTICK)
     }
 
     /**

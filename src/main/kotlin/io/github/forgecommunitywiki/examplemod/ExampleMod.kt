@@ -27,6 +27,7 @@ package io.github.forgecommunitywiki.examplemod
 import io.github.forgecommunitywiki.examplemod.client.initClient
 import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
 import io.github.forgecommunitywiki.examplemod.data.client.Localizations
+import io.github.forgecommunitywiki.examplemod.data.server.GlobalLootModifiers
 import io.github.forgecommunitywiki.examplemod.data.server.Recipes
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.MinecraftForge
@@ -88,6 +89,7 @@ internal class ExampleMod {
         }
         if(event.includeServer()) {
             gen.addProvider(Recipes(gen))
+            gen.addProvider(GlobalLootModifiers(gen))
         }
     }
 }

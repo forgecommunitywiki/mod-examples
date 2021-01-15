@@ -25,21 +25,51 @@
 package io.github.forgecommunitywiki.examplemod
 
 import io.github.forgecommunitywiki.examplemod.item.InstrumentElementItem
+import io.github.forgecommunitywiki.examplemod.loot.ReplaceLootModifier
+import io.github.forgecommunitywiki.examplemod.potion.DamageEffect
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
+import net.minecraft.potion.EffectType
+import net.minecraft.util.DamageSource
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.SoundEvent
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.RegistryObject
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
+import net.minecraft.potion.EffectInstance
+
+import net.minecraft.item.Food
+import net.minecraft.item.Item
+import net.minecraft.potion.Effect
+
+import net.minecraft.potion.Effects
+import net.minecraft.util.SoundEvents
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer
+
 
 // Registers
 private val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID)
 private val ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID)
+private val EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, MOD_ID)
 private val SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MOD_ID)
+private val LOOT_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, MOD_ID)
+
+// Damage Sources
+val INTERNAL_HEMORRHAGE_SOURCE: DamageSource = DamageSource("internal_hemorrhage").setDamageBypassesArmor()
+
+// Foods
+val CHICKEN_LEG_FOOD: Food = Food.Builder().hunger(1).saturation(0.1f)
+    .effect({ EffectInstance(Effects.HUNGER, 600, 0) }, 0.4f).meat().build()
+val COOKED_CHICKEN_LEG_FOOD: Food = Food.Builder().hunger(3).saturation(0.3f).meat().build()
+val CHICKEN_DRUMSTICK_FOOD: Food = Food.Builder().hunger(2).saturation(0.2f)
+    .effect({ EffectInstance(INTERNAL_HEMORRHAGE.get(), 400, 1, false, false) }, 0.8f)
+    .meat().build()
+val COOKED_CHICKEN_DRUMSTICK_FOOD: Food = Food.Builder().hunger(4).saturation(0.3f)
+    .effect({ EffectInstance(INTERNAL_HEMORRHAGE.get(), 300, 0, false, false) }, 0.6f)
+    .meat().build()
 
 // Items
 val DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("drumstick")
@@ -55,6 +85,18 @@ val DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("drumstick
      */
     override fun getBurnTime(stack: ItemStack?): Int = 300
 } }
+val CHICKEN_LEG: RegistryObject<Item> = ITEMS.register("chicken_leg")
+    { Item(Item.Properties().group(ItemGroup.FOOD).food(CHICKEN_LEG_FOOD)) }
+val COOKED_CHICKEN_LEG: RegistryObject<Item> = ITEMS.register("cooked_chicken_leg")
+    { Item(Item.Properties().group(ItemGroup.FOOD).food(COOKED_CHICKEN_LEG_FOOD)) }
+val CHICKEN_DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("chicken_drumstick")
+    { InstrumentElementItem(Item.Properties().group(ItemGroup.MISC).maxStackSize(2).food(CHICKEN_DRUMSTICK_FOOD))}
+val COOKED_CHICKEN_DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("cooked_chicken_drumstick")
+    { InstrumentElementItem(Item.Properties().group(ItemGroup.MISC).maxStackSize(2).food(COOKED_CHICKEN_DRUMSTICK_FOOD))}
+
+// Effects
+val INTERNAL_HEMORRHAGE: RegistryObject<Effect> = EFFECTS.register("internal_hemorrhage")
+    { DamageEffect(EffectType.HARMFUL, 0x9F0000, INTERNAL_HEMORRHAGE_SOURCE, 40, false) }
 
 // Sound Events
 val DRUMSTICK_OAK_LOG_HIT = registerSoundEvent("instrument.drumstick.oak_log")
@@ -66,6 +108,9 @@ val DRUMSTICK_DARK_OAK_LOG_HIT = registerSoundEvent("instrument.drumstick.dark_o
 val DRUMSTICK_CRIMSON_STEM_HIT = registerSoundEvent("instrument.drumstick.crimson_stem")
 val DRUMSTICK_WARPED_STEM_HIT = registerSoundEvent("instrument.drumstick.warped_stem")
 
+// Global Loot Modifiers
+val REPLACE_LOOT: RegistryObject<GlobalLootModifierSerializer<ReplaceLootModifier>> = LOOT_MODIFIER_SERIALIZERS.register("replace") { ReplaceLootModifier.Serializer() }
+
 // Slave Maps
 private val ELEMENT_SOUNDS by lazy { mapOf(DRUMSTICK.get() to mapOf(
     Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
@@ -76,6 +121,14 @@ private val ELEMENT_SOUNDS by lazy { mapOf(DRUMSTICK.get() to mapOf(
     Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
     Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
     Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get()
+), CHICKEN_DRUMSTICK.get() to mapOf(
+    Blocks.STONE to SoundEvents.ENTITY_CHICKEN_HURT,
+    Blocks.GRANITE to SoundEvents.ENTITY_CHICKEN_HURT,
+    Blocks.DIORITE to SoundEvents.ENTITY_CHICKEN_HURT,
+    Blocks.ANDESITE to SoundEvents.ENTITY_CHICKEN_HURT
+), COOKED_CHICKEN_DRUMSTICK.get() to mapOf(
+    Blocks.GRASS_BLOCK to SoundEvents.ENTITY_CHICKEN_AMBIENT,
+    Blocks.DIRT to SoundEvents.ENTITY_CHICKEN_AMBIENT
 )) }
 
 /**
@@ -84,7 +137,9 @@ private val ELEMENT_SOUNDS by lazy { mapOf(DRUMSTICK.get() to mapOf(
 internal fun register(modBus: IEventBus) {
     BLOCKS.register(modBus)
     ITEMS.register(modBus)
+    EFFECTS.register(modBus)
     SOUND_EVENTS.register(modBus)
+    LOOT_MODIFIER_SERIALIZERS.register(modBus)
 }
 
 /**

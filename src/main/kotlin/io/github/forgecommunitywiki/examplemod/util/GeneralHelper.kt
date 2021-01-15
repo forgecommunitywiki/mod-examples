@@ -24,20 +24,23 @@
 
 package io.github.forgecommunitywiki.examplemod.util
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
+import org.apache.logging.log4j.LogManager
 import java.util.*
-import java.util.function.Supplier
 
 /**
  * Global gson instance.
  */
-internal val GSON: Gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
+internal val GSON = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
+/**
+ * Global logger instance.
+ */
+internal val LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod")
 
 /**
  * Creates a codec that converts a string to the specified registry.

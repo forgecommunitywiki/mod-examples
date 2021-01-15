@@ -27,6 +27,7 @@ package io.github.forgecommunitywiki.examplemod.data.client
 import io.github.forgecommunitywiki.examplemod.*
 import io.github.forgecommunitywiki.examplemod.MOD_ID
 import net.minecraft.data.DataGenerator
+import net.minecraft.util.DamageSource
 import net.minecraft.util.SoundEvent
 import net.minecraftforge.common.data.LanguageProvider
 import java.util.function.Supplier
@@ -42,7 +43,21 @@ internal class Localizations(gen: DataGenerator, locale: String)
     override fun addTranslations() =
         when(name.replace("Languages: ", "")) {
             "en_us" -> {
+                // Damage Sources
+                this.addDeathMessage(INTERNAL_HEMORRHAGE_SOURCE, "%1\$s internally bled to death",
+                    "%1\$s internally bled to death whilst fighting %2\$s")
+
+                // Items
                 this.addItem(DRUMSTICK, "Drumstick")
+                this.addItem(CHICKEN_LEG, "Chicken Leg")
+                this.addItem(COOKED_CHICKEN_LEG, "Cooked Chicken Leg")
+                this.addItem(CHICKEN_DRUMSTICK, "Chicken Drumstick")
+                this.addItem(COOKED_CHICKEN_DRUMSTICK, "Cooked Chicken Drumstick")
+
+                // Effects
+                this.addEffect(INTERNAL_HEMORRHAGE, "Internal Hemorrhage")
+
+                // Sound Events
                 this.addSoundEventSubtitle(DRUMSTICK_OAK_LOG_HIT, "Drumstick Hits Oak Log")
                 this.addSoundEventSubtitle(DRUMSTICK_BIRCH_LOG_HIT, "Drumstick Hits Birch Log")
                 this.addSoundEventSubtitle(DRUMSTICK_SPRUCE_LOG_HIT, "Drumstick Hits Spruce Log")
@@ -67,4 +82,20 @@ internal class Localizations(gen: DataGenerator, locale: String)
      */
     private fun addSoundEventSubtitle(key: Supplier<out SoundEvent>, value: String)
         = add(key.get().registryName.toString().replace(':', '.'), value)
+
+    /**
+     * Adds a death message translation in the default format provided by
+     * {@link DamageSource#getDeathMessage(net.minecraft.entity.LivingEntity)}. The
+     * parameters for the objects can be specified using %n$s where n is the object
+     * number.
+     *
+     * @param source             The damage source
+     * @param deathMessage       The regular death message
+     * @param entityDeathMessage The death message when there is an attacking entity
+     */
+    private fun addDeathMessage(source: DamageSource, deathMessage: String, entityDeathMessage: String)
+        = "death.attack.${source.damageType}".let {
+            add(it, deathMessage)
+            add("${it}.player", entityDeathMessage)
+    }
 }
