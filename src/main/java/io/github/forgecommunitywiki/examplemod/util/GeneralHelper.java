@@ -26,6 +26,9 @@ package io.github.forgecommunitywiki.examplemod.util;
 
 import java.util.Objects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.serialization.Codec;
@@ -44,6 +47,10 @@ public class GeneralHelper {
      * Global gson instance.
      */
     public static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+    /**
+     * Global logger instance.
+     */
+    public static final Logger LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod");
 
     /**
      * Creates a codec that converts a string to the specified registry.

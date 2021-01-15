@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import io.github.forgecommunitywiki.examplemod.client.ClientHandler;
 import io.github.forgecommunitywiki.examplemod.data.client.ItemModels;
 import io.github.forgecommunitywiki.examplemod.data.client.Localizations;
+import io.github.forgecommunitywiki.examplemod.data.server.GlobalLootModifiers;
 import io.github.forgecommunitywiki.examplemod.data.server.Recipes;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.api.distmarker.Dist;
@@ -89,7 +90,9 @@ public final class ExampleMod {
             Stream.of("en_us").forEach(locale -> gen.addProvider(new Localizations(gen, locale)));
             gen.addProvider(new ItemModels(gen, helper));
         }
-        if (event.includeServer())
+        if (event.includeServer()) {
             gen.addProvider(new Recipes(gen));
+            gen.addProvider(new GlobalLootModifiers(gen));
+        }
     }
 }

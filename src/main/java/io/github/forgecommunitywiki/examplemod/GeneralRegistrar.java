@@ -27,10 +27,14 @@ package io.github.forgecommunitywiki.examplemod;
 import java.util.*;
 
 import io.github.forgecommunitywiki.examplemod.item.InstrumentElementItem;
+import io.github.forgecommunitywiki.examplemod.loot.ReplaceLootModifier;
+import io.github.forgecommunitywiki.examplemod.potion.DamageEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
+import net.minecraft.potion.*;
 import net.minecraft.util.*;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -45,8 +49,27 @@ public final class GeneralRegistrar {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
             ExampleMod.ID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ExampleMod.ID);
+    private static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS,
+            ExampleMod.ID);
     private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister
             .create(ForgeRegistries.SOUND_EVENTS, ExampleMod.ID);
+    private static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIER_SERIALIZERS = DeferredRegister
+            .create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, ExampleMod.ID);
+
+    // Damage Sources
+    public static final DamageSource INTERNAL_HEMORRHAGE_SOURCE = new DamageSource("internal_hemorrhage")
+            .setDamageBypassesArmor();
+
+    // Foods
+    public static final Food CHICKEN_LEG_FOOD = new Food.Builder().hunger(1).saturation(0.1f)
+            .effect(() -> new EffectInstance(Effects.HUNGER, 600, 0), 0.4f).meat().build();
+    public static final Food COOKED_CHICKEN_LEG_FOOD = new Food.Builder().hunger(3).saturation(0.3f).meat().build();
+    public static final Food CHICKEN_DRUMSTICK_FOOD = new Food.Builder().hunger(2).saturation(0.2f)
+            .effect(() -> new EffectInstance(GeneralRegistrar.INTERNAL_HEMORRHAGE.get(), 400, 1, false, false), 0.8f)
+            .meat().build();
+    public static final Food COOKED_CHICKEN_DRUMSTICK_FOOD = new Food.Builder().hunger(4).saturation(0.3f)
+            .effect(() -> new EffectInstance(GeneralRegistrar.INTERNAL_HEMORRHAGE.get(), 300, 0, false, false), 0.6f)
+            .meat().build();
 
     // Items
     public static final RegistryObject<InstrumentElementItem> DRUMSTICK = GeneralRegistrar.ITEMS.register("drumstick",
@@ -65,6 +88,21 @@ public final class GeneralRegistrar {
                     return 300;
                 }
             });
+    public static final RegistryObject<Item> CHICKEN_LEG = GeneralRegistrar.ITEMS.register("chicken_leg",
+            () -> new Item(new Item.Properties().group(ItemGroup.FOOD).food(GeneralRegistrar.CHICKEN_LEG_FOOD)));
+    public static final RegistryObject<Item> COOKED_CHICKEN_LEG = GeneralRegistrar.ITEMS.register("cooked_chicken_leg",
+            () -> new Item(new Item.Properties().group(ItemGroup.FOOD).food(GeneralRegistrar.COOKED_CHICKEN_LEG_FOOD)));
+    public static final RegistryObject<InstrumentElementItem> CHICKEN_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("chicken_drumstick", () -> new InstrumentElementItem(new Item.Properties().group(ItemGroup.MISC)
+                    .maxStackSize(2).food(GeneralRegistrar.CHICKEN_DRUMSTICK_FOOD)));
+    public static final RegistryObject<InstrumentElementItem> COOKED_CHICKEN_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("cooked_chicken_drumstick", () -> new InstrumentElementItem(new Item.Properties()
+                    .group(ItemGroup.MISC).maxStackSize(2).food(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK_FOOD)));
+
+    // Effects
+    public static final RegistryObject<Effect> INTERNAL_HEMORRHAGE = GeneralRegistrar.EFFECTS
+            .register("internal_hemorrhage", () -> new DamageEffect(EffectType.HARMFUL, 0x9F0000,
+                    GeneralRegistrar.INTERNAL_HEMORRHAGE_SOURCE, 40, false));
 
     // Sound Events
     public static final RegistryObject<SoundEvent> DRUMSTICK_OAK_LOG_HIT = GeneralRegistrar
@@ -84,6 +122,10 @@ public final class GeneralRegistrar {
     public static final RegistryObject<SoundEvent> DRUMSTICK_WARPED_STEM_HIT = GeneralRegistrar
             .registerSoundEvent("instrument.drumstick.warped_stem");
 
+    // Global Loot Modifiers
+    public static final RegistryObject<GlobalLootModifierSerializer<ReplaceLootModifier>> REPLACE_LOOT = GeneralRegistrar.LOOT_MODIFIER_SERIALIZERS
+            .register("replace", ReplaceLootModifier.Serializer::new);
+
     // Slave Maps
     private static final Map<InstrumentElementItem, Map<Block, SoundEvent>> ELEMENT_SOUNDS = new HashMap<>();
 
@@ -95,7 +137,9 @@ public final class GeneralRegistrar {
     protected static void register(final IEventBus modBus) {
         GeneralRegistrar.BLOCKS.register(modBus);
         GeneralRegistrar.ITEMS.register(modBus);
+        GeneralRegistrar.EFFECTS.register(modBus);
         GeneralRegistrar.SOUND_EVENTS.register(modBus);
+        GeneralRegistrar.LOOT_MODIFIER_SERIALIZERS.register(modBus);
     }
 
     /**
@@ -112,6 +156,18 @@ public final class GeneralRegistrar {
             map.put(Blocks.CRIMSON_STEM, GeneralRegistrar.DRUMSTICK_CRIMSON_STEM_HIT.get());
             map.put(Blocks.WARPED_STEM, GeneralRegistrar.DRUMSTICK_WARPED_STEM_HIT.get());
         }));
+        GeneralRegistrar.ELEMENT_SOUNDS.put(GeneralRegistrar.CHICKEN_DRUMSTICK.get(),
+                Util.make(new HashMap<>(), map -> {
+                    map.put(Blocks.STONE, SoundEvents.ENTITY_CHICKEN_HURT);
+                    map.put(Blocks.GRANITE, SoundEvents.ENTITY_CHICKEN_HURT);
+                    map.put(Blocks.DIORITE, SoundEvents.ENTITY_CHICKEN_HURT);
+                    map.put(Blocks.ANDESITE, SoundEvents.ENTITY_CHICKEN_HURT);
+                }));
+        GeneralRegistrar.ELEMENT_SOUNDS.put(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(),
+                Util.make(new HashMap<>(), map -> {
+                    map.put(Blocks.GRASS_BLOCK, SoundEvents.ENTITY_CHICKEN_AMBIENT);
+                    map.put(Blocks.DIRT, SoundEvents.ENTITY_CHICKEN_AMBIENT);
+                }));
     }
 
     /**

@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 import io.github.forgecommunitywiki.examplemod.ExampleMod;
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -47,7 +48,21 @@ public class Localizations extends LanguageProvider {
     protected void addTranslations() {
         switch (this.getName().replace("Languages: ", "")) {
             case "en_us":
+                // Damage Sources
+                this.addDeathMessage(GeneralRegistrar.INTERNAL_HEMORRHAGE_SOURCE, "%1$s internally bled to death",
+                        "%1$s internally bled to death whilst fighting %2$s");
+
+                // Items
                 this.addItem(GeneralRegistrar.DRUMSTICK, "Drumstick");
+                this.addItem(GeneralRegistrar.CHICKEN_LEG, "Chicken Leg");
+                this.addItem(GeneralRegistrar.COOKED_CHICKEN_LEG, "Cooked Chicken Leg");
+                this.addItem(GeneralRegistrar.CHICKEN_DRUMSTICK, "Chicken Drumstick");
+                this.addItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK, "Cooked Chicken Drumstick");
+
+                // Effects
+                this.addEffect(GeneralRegistrar.INTERNAL_HEMORRHAGE, "Internal Hemorrhage");
+
+                // Sound Events
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_OAK_LOG_HIT, "Drumstick Hits Oak Log");
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_BIRCH_LOG_HIT, "Drumstick Hits Birch Log");
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_SPRUCE_LOG_HIT, "Drumstick Hits Spruce Log");
@@ -72,5 +87,22 @@ public class Localizations extends LanguageProvider {
      */
     protected void addSoundEventSubtitle(final Supplier<? extends SoundEvent> key, final String value) {
         this.add(key.get().getRegistryName().toString().replace(':', '.'), value);
+    }
+
+    /**
+     * Adds a death message translation in the default format provided by
+     * {@link DamageSource#getDeathMessage(net.minecraft.entity.LivingEntity)}. The
+     * parameters for the objects can be specified using %n$s where n is the object
+     * number.
+     *
+     * @param source             The damage source
+     * @param deathMessage       The regular death message
+     * @param entityDeathMessage The death message when there is an attacking entity
+     */
+    protected void addDeathMessage(final DamageSource source, final String deathMessage,
+            final String entityDeathMessage) {
+        final String key = "death.attack." + source.damageType;
+        this.add(key, deathMessage);
+        this.add(key + ".player", entityDeathMessage);
     }
 }

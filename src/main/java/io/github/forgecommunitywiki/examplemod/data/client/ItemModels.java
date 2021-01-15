@@ -48,6 +48,10 @@ public class ItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
         this.simpleItem(GeneralRegistrar.DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.CHICKEN_LEG);
+        this.simpleItem(GeneralRegistrar.COOKED_CHICKEN_LEG);
+        this.simpleItem(GeneralRegistrar.CHICKEN_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK);
     }
 
     /**
