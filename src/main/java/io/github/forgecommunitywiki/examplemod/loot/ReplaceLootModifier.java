@@ -24,7 +24,10 @@
 
 package io.github.forgecommunitywiki.examplemod.loot;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -66,35 +69,26 @@ public class ReplaceLootModifier extends LootModifier {
 
     @Override
     protected List<ItemStack> doApply(final List<ItemStack> generatedLoot, final LootContext context) {
-        final Iterator<ItemStack> it = generatedLoot.iterator();
-        final List<ItemStack> additions = new ArrayList<>();
-        /**
-         * An iterator is used here to safely remove elements from the list while we
-         * check if any of the loot matches the specified target.
-         */
-        while (it.hasNext()) {
-            final ItemStack stack = it.next();
-            if (stack.getItem() == this.target) {
-                int count = stack.getCount() * this.replacement.getCount();
-                /**
-                 * This is a simple loop to ensure that the counts associated with the replaced
-                 * stacks are compressed as much as possible per item replaced.
-                 */
-                while (count > 0) {
-                    final int stackCount = Math.min(count, 64);
-                    final ItemStack replacementStack = Util.make(this.replacement.copy(), s -> s.setCount(stackCount));
-                    additions.add(replacementStack);
-                    count -= stackCount;
-                }
-                it.remove();
-            }
+        return generatedLoot.stream().flatMap(
+                stack -> stack.getItem() == this.target ? this.createStacks(stack.getCount()) : Stream.of(stack))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Creates the {@link ItemStack}(s) of the replacement and compresses them into
+     * as few stacks as possible.
+     *
+     * @param  count The number of stacks to produce
+     * @return       The compressed stack list
+     */
+    private Stream<ItemStack> createStacks(int count) {
+        final List<ItemStack> list = new ArrayList<>();
+        while (count > 0) {
+            final int stackCount = Math.min(count, this.replacement.getMaxStackSize());
+            list.add(Util.make(this.replacement.copy(), stack -> stack.setCount(stackCount)));
+            count -= stackCount;
         }
-        /**
-         * We can add all of these elements to the end of the list with no additional
-         * complexity, leaving us with a time complexity of O(n) at worst.
-         */
-        generatedLoot.addAll(additions);
-        return generatedLoot;
+        return list.stream();
     }
 
     /**
