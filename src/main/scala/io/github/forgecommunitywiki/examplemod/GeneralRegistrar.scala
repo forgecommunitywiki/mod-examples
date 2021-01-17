@@ -113,8 +113,8 @@ object GeneralRegistrar {
      * @param  name The sound name as dictated within {@code sounds.json}.
      * @return      The sound event registry object
      */
-    private def registerSoundEvent(name: String): RegistryObject[SoundEvent]
-        = SOUND_EVENTS.register(name, () => new SoundEvent(new ResourceLocation(ExampleMod.ID, name)))
+    private def registerSoundEvent(name: String): RegistryObject[SoundEvent] =
+        SOUND_EVENTS.register(name, () => new SoundEvent(new ResourceLocation(ExampleMod.ID, name)))
 
      /**
      * Grabs the instrument element sound according to the block hit. Returns null
@@ -124,6 +124,6 @@ object GeneralRegistrar {
      * @param  hitBlock The block being hit
      * @return          The sound played if the block is hit, an empty option otherwise
      */
-    def getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): Option[SoundEvent]
-        = ELEMENT_SOUNDS.getOrElse(item, Map()).get(hitBlock)
+    def getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): Option[SoundEvent] =
+        ELEMENT_SOUNDS.getOrElse(item, Map()).get(hitBlock)
 }

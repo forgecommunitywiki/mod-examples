@@ -65,7 +65,7 @@ class ExampleMod {
      * @param event The common setup event
      */
     private def commonSetup(event: FMLCommonSetupEvent): Unit = {
-        GeneralRegistrar.registerSlaveMaps
+        GeneralRegistrar.registerSlaveMaps()
     }
 
     /**

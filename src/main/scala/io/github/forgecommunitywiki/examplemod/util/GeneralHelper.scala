@@ -49,8 +49,8 @@ object GeneralHelper {
     * @return                      A codec for the specific registry
     * @throws NullPointerException If the registry is null
     */
-    def registryCodec[V <: IForgeRegistryEntry[V]](registry: IForgeRegistry[V]) : Codec[V]
-        = ResourceLocation.CODEC.comapFlatMap(loc => 
+    def registryCodec[V <: IForgeRegistryEntry[V]](registry: IForgeRegistry[V]) : Codec[V] =
+        ResourceLocation.CODEC.comapFlatMap(loc => 
             if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
             else DataResult.error("Not a valid registry object within " + registry.getRegistryName() + ": " + loc)
         , entry => entry.getRegistryName())
