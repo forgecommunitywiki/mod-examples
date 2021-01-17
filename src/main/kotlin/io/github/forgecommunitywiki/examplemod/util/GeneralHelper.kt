@@ -50,8 +50,8 @@ internal val LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod")
  * @return                      A codec for the specific registry
  * @throws NullPointerException If the registry is null
  */
-internal fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V>
-        = ResourceLocation.CODEC.comapFlatMap({ loc ->
-    if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
-    else DataResult.error("Not a valid registry object within ${registry.registryName}: $loc")
-}, IForgeRegistryEntry<V>::getRegistryName)
+internal fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V> =
+    ResourceLocation.CODEC.comapFlatMap({ loc ->
+        if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
+        else DataResult.error("Not a valid registry object within ${registry.registryName}: $loc")
+    }, IForgeRegistryEntry<V>::getRegistryName)

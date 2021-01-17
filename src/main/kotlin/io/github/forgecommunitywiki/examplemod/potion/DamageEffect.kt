@@ -38,24 +38,18 @@ import net.minecraft.util.DamageSource
 open class DamageEffect(type: EffectType, liquidColor: Int, private val source: DamageSource, private val baseTime: Int, private val shouldRender: Boolean)
     : Effect(type, liquidColor) {
 
-    override fun performEffect(entity: LivingEntity, amplifier: Int)
-        = entity.attackEntityFrom(source, 1.0f).run {}
+    override fun performEffect(entity: LivingEntity, amplifier: Int) =
+        entity.attackEntityFrom(source, 1.0f).run {}
 
-    override fun isReady(duration: Int, amplifier: Int): Boolean
-        = (baseTime shr amplifier).let { if (it > 0) duration.rem(it) == 0 else true }
+    override fun isReady(duration: Int, amplifier: Int): Boolean =
+        (baseTime shr amplifier).let { if (it > 0) duration.rem(it) == 0 else true }
 
     /**
      * Since this handles non-instantaneous effects, there should be no logic
      * besides {@link #performEffect(LivingEntity, int)} within this method. This
      * should only be changed if the effect is instant.
      */
-    override fun affectEntity(
-        source: Entity?,
-        indirectSource: Entity?,
-        entity: LivingEntity,
-        amplifier: Int,
-        health: Double
-    ) = performEffect(entity, amplifier)
+    override fun affectEntity(source: Entity?, indirectSource: Entity?, entity: LivingEntity, amplifier: Int, health: Double) = performEffect(entity, amplifier)
 
     override fun shouldRender(effect: EffectInstance?): Boolean = shouldRender
 

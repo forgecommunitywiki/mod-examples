@@ -80,8 +80,8 @@ internal class Localizations(gen: DataGenerator, locale: String)
      * @param key   The sound event to add a subtitle for
      * @param value The localized subtitle
      */
-    private fun addSoundEventSubtitle(key: Supplier<out SoundEvent>, value: String)
-        = add(key.get().registryName.toString().replace(':', '.'), value)
+    private fun addSoundEventSubtitle(key: Supplier<out SoundEvent>, value: String) =
+        add(key.get().registryName.toString().replace(':', '.'), value)
 
     /**
      * Adds a death message translation in the default format provided by
@@ -93,9 +93,9 @@ internal class Localizations(gen: DataGenerator, locale: String)
      * @param deathMessage       The regular death message
      * @param entityDeathMessage The death message when there is an attacking entity
      */
-    private fun addDeathMessage(source: DamageSource, deathMessage: String, entityDeathMessage: String)
-        = "death.attack.${source.damageType}".let {
+    private fun addDeathMessage(source: DamageSource, deathMessage: String, entityDeathMessage: String) =
+        "death.attack.${source.damageType}".let {
             add(it, deathMessage)
             add("${it}.player", entityDeathMessage)
-    }
+        }
 }
