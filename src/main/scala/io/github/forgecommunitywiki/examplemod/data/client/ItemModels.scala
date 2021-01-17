@@ -45,6 +45,10 @@ class ItemModels(generator: DataGenerator, existingFileHelper: ExistingFileHelpe
 
     override protected def registerModels(): Unit = {
         simpleItem(GeneralRegistrar.DRUMSTICK)
+        simpleItem(GeneralRegistrar.CHICKEN_LEG)
+        simpleItem(GeneralRegistrar.COOKED_CHICKEN_LEG)
+        simpleItem(GeneralRegistrar.CHICKEN_DRUMSTICK)
+        simpleItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK)
     }
 
     /**
@@ -56,9 +60,9 @@ class ItemModels(generator: DataGenerator, existingFileHelper: ExistingFileHelpe
      *
      * @param itemSupplier The item to generate the model for
      */
-    protected def simpleItem[T <: Item](itemSupplier: Supplier[T]) = {
-        val location = itemSupplier.get().getRegistryName()
-        this.getBuilder(location.toString()).parent(new ModelFile.UncheckedModelFile("item/generated"))
-            .texture("layer0", new ResourceLocation(location.getNamespace(), ModelProvider.ITEM_FOLDER + "/" + location.getPath()))
-    }
+    protected def simpleItem[T <: Item](itemSupplier: Supplier[T]): Unit =
+        new Some(itemSupplier.get().getRegistryName()).map(location =>
+            this.getBuilder(location.toString()).parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", new ResourceLocation(location.getNamespace(), ModelProvider.ITEM_FOLDER + "/" + location.getPath()))
+        ).map(_ => {}).get
 }

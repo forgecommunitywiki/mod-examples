@@ -36,6 +36,7 @@ import io.github.forgecommunitywiki.examplemod.data.server.Recipes
 import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
 import io.github.forgecommunitywiki.examplemod.data.client.Localizations
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import io.github.forgecommunitywiki.examplemod.data.server.GlobalLootModifiers
 
 /**
  * The main class used to handle any registration or common events associated
@@ -82,6 +83,7 @@ class ExampleMod {
         }
         if(event.includeServer()) {
             gen.addProvider(new Recipes(gen))
+            gen.addProvider(new GlobalLootModifiers(gen))
         }
     }
 }

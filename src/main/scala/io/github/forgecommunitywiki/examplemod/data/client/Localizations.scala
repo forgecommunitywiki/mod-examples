@@ -30,6 +30,7 @@ import io.github.forgecommunitywiki.examplemod.ExampleMod
 import java.util.function.Supplier
 import net.minecraft.util.SoundEvent
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
+import net.minecraft.util.DamageSource
 
 /**
  * Adds localizations depending on the entered locale. Uses a switch to
@@ -42,7 +43,22 @@ class Localizations(gen: DataGenerator, locale: String)
     override protected def addTranslations(): Unit =
         getName().replace("Languages: ", "") match {
             case "en_us" => {
+                // Damage Sources
+                this.addDeathMessage(GeneralRegistrar.INTERNAL_HEMORRHAGE_SOURCE,
+                    "%1$s internally bled to death",
+                    "%1$s internally bled to death whilst fighting %2$s")
+
+                // Items
                 this.addItem(GeneralRegistrar.DRUMSTICK, "Drumstick")
+                this.addItem(GeneralRegistrar.CHICKEN_LEG, "Chicken Leg")
+                this.addItem(GeneralRegistrar.COOKED_CHICKEN_LEG, "Cooked Chicken Leg")
+                this.addItem(GeneralRegistrar.CHICKEN_DRUMSTICK, "Chicken Drumstick")
+                this.addItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK, "Cooked Chicken Drumstick")
+
+                // Effects
+                this.addEffect(GeneralRegistrar.INTERNAL_HEMORRHAGE, "Internal Hemorrhage")
+
+                // Sound Events
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_OAK_LOG_HIT, "Drumstick Hits Oak Log")
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_BIRCH_LOG_HIT, "Drumstick Hits Birch Log")
                 this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_SPRUCE_LOG_HIT, "Drumstick Hits Spruce Log")
@@ -66,4 +82,20 @@ class Localizations(gen: DataGenerator, locale: String)
      */
     protected def addSoundEventSubtitle(key: Supplier[SoundEvent], value: String): Unit =
         add(key.get().getRegistryName().toString().replace(':', '.'), value)
+
+    /**
+     * Adds a death message translation in the default format provided by
+     * {@link DamageSource#getDeathMessage(net.minecraft.entity.LivingEntity)}. The
+     * parameters for the objects can be specified using %n$s where n is the object
+     * number.
+     *
+     * @param source             The damage source
+     * @param deathMessage       The regular death message
+     * @param entityDeathMessage The death message when there is an attacking entity
+     */
+    protected def addDeathMessage(source: DamageSource, deathMessage: String, entityDeathMessage: String): Unit =
+        new Some("death.attack." + source.damageType).map(m => {
+            add(m, deathMessage)
+            add(m + ".player", entityDeathMessage)
+        }).get
 }

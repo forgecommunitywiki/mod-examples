@@ -31,6 +31,11 @@ import net.minecraft.data.IFinishedRecipe
 import net.minecraft.data.ShapedRecipeBuilder
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
 import net.minecraft.item.Items
+import net.minecraft.data.CookingRecipeBuilder
+import net.minecraft.item.crafting.Ingredient
+import net.minecraft.util.ResourceLocation
+import net.minecraft.item.crafting.IRecipeSerializer
+import io.github.forgecommunitywiki.examplemod.ExampleMod
 
 /**
  * A provider used to generate recipes for items within the game. It will create
@@ -39,6 +44,7 @@ import net.minecraft.item.Items
 class Recipes(generator: DataGenerator) extends RecipeProvider(generator) {
 
     override protected def registerRecipes(consumer: Consumer[IFinishedRecipe]): Unit = {
+        // Shaped Crafting
         ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.DRUMSTICK.get())
             .patternLine("  X")
             .patternLine(" X ")
@@ -46,5 +52,55 @@ class Recipes(generator: DataGenerator) extends RecipeProvider(generator) {
             .key('X', Items.STICK)
             .addCriterion("has_item", RecipeProvider.hasItem(Items.STICK))
             .build(consumer)
+        ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.CHICKEN_DRUMSTICK.get())
+            .patternLine("  C")
+            .patternLine(" X ")
+            .patternLine("X  ")
+            .key('X', Items.BONE).key('C', GeneralRegistrar.CHICKEN_LEG.get())
+            .addCriterion("has_item", RecipeProvider.hasItem(Items.BONE)).addCriterion("has_item_2", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get()))
+            .build(consumer)
+        ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get())
+            .patternLine("  C")
+            .patternLine(" X ")
+            .patternLine("X  ")
+            .key('X', Items.BONE).key('C', GeneralRegistrar.COOKED_CHICKEN_LEG.get())
+            .addCriterion("has_item", RecipeProvider.hasItem(Items.BONE)).addCriterion("has_item_2", RecipeProvider.hasItem(GeneralRegistrar.COOKED_CHICKEN_LEG.get()))
+            .build(consumer)
+
+        // Smelting
+
+        CookingRecipeBuilder
+            .smeltingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_LEG.get()),
+                GeneralRegistrar.COOKED_CHICKEN_LEG.get(), 0.18f, 100)
+            .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get())).build(consumer)
+        CookingRecipeBuilder
+            .smeltingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_DRUMSTICK.get()),
+                GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(), 0.09f, 175)
+            .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get()))
+            .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_drumstick_from_smelting"))
+
+        // Smoking
+        CookingRecipeBuilder
+            .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_LEG.get()),
+                GeneralRegistrar.COOKED_CHICKEN_LEG.get(), 0.18f, 50, IRecipeSerializer.SMOKING)
+            .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get()))
+            .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_leg_from_smoking"))
+        CookingRecipeBuilder
+            .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_DRUMSTICK.get()),
+                GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(), 0.09f, 88, IRecipeSerializer.SMOKING)
+            .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get()))
+            .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_drumstick_from_smoking"))
+
+        // Campfire Cooking
+        CookingRecipeBuilder
+            .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_LEG.get()),
+                GeneralRegistrar.COOKED_CHICKEN_LEG.get(), 0.18f, 300, IRecipeSerializer.CAMPFIRE_COOKING)
+            .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get()))
+            .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_leg_from_campfire_cooking"))
+        CookingRecipeBuilder
+            .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_DRUMSTICK.get()),
+                GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(), 0.09f, 525, IRecipeSerializer.CAMPFIRE_COOKING)
+            .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get()))
+            .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_drumstick_from_campfire_cooking"))
     }
 }

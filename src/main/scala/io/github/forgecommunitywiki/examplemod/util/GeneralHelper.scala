@@ -30,6 +30,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry
 import net.minecraft.util.ResourceLocation
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.Codec
+import org.apache.logging.log4j.LogManager
 
 /**
  * Holds non-specific utilities used within the mod.
@@ -40,6 +41,10 @@ object GeneralHelper {
      * Global gson instance.
      */
     final val GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
+    /**
+     * Global logger instance.
+     */
+    final val LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod")
 
     /**
     * Creates a codec that converts a string to the specified registry.
