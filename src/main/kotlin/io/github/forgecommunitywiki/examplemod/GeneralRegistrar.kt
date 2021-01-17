@@ -158,8 +158,8 @@ internal fun registerSlaveMaps() {
  * @param  name The sound name as dictated within {@code sounds.json}.
  * @return      The sound event registry object
  */
-private fun registerSoundEvent(name: String) : RegistryObject<SoundEvent>
-        = SOUND_EVENTS.register(name) { SoundEvent(ResourceLocation(MOD_ID, name)) }
+private fun registerSoundEvent(name: String) : RegistryObject<SoundEvent> =
+    SOUND_EVENTS.register(name) { SoundEvent(ResourceLocation(MOD_ID, name)) }
 
 /**
  * Grabs the instrument element sound according to the block hit. Returns null
@@ -169,5 +169,5 @@ private fun registerSoundEvent(name: String) : RegistryObject<SoundEvent>
  * @param  hitBlock The block being hit
  * @return          The sound played if the block is hit, null otherwise
  */
-fun getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): SoundEvent?
-        = ELEMENT_SOUNDS.getOrDefault(item, mapOf())[hitBlock]
+fun getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): SoundEvent? =
+    ELEMENT_SOUNDS.getOrDefault(item, mapOf())[hitBlock]
