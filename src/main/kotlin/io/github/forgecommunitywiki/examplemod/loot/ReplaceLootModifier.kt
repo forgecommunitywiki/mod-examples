@@ -73,24 +73,24 @@ class ReplaceLootModifier(conditions: Array<out ILootCondition>, private val tar
      */
     class Serializer: GlobalLootModifierSerializer<ReplaceLootModifier>() {
 
-        /**
-         * A log marker used for the serializer.
-         */
-        private val marker = MarkerManager.getMarker("Replace Loot Serializer")
-
         override fun read(location: ResourceLocation?, `object`: JsonObject, ailootcondition: Array<out ILootCondition>): ReplaceLootModifier =
             ReplaceLootModifier(ailootcondition,
             ForgeRegistries.ITEMS.getValue(ResourceLocation(JSONUtils.getString(`object`, "target")))!!,
             ItemStack.CODEC.parse(JsonOps.INSTANCE, JSONUtils.getJsonObject(`object`, "replacement"))
-                .resultOrPartial { LOGGER.error(marker, "An error has occurred decoding the following replace loot modifier: {}", it) }
+                .resultOrPartial { LOGGER.error(MARKER, "An error has occurred decoding the following replace loot modifier: {}", it) }
                 .orElseThrow { JsonParseException("The following replacement stack has been deserialized incorrectly.") })
 
         override fun write(instance: ReplaceLootModifier): JsonObject =
             makeConditions(instance.conditions).also { json ->
             json.addProperty("target", instance.target.registryName.toString())
             ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, instance.replacement)
-                .resultOrPartial  { LOGGER.error(marker, "An error has occurred encoding the following replace loot modifier: {}", it) }
+                .resultOrPartial  { LOGGER.error(MARKER, "An error has occurred encoding the following replace loot modifier: {}", it) }
                 .ifPresent { json.add("replacement", it) }
             }
     }
 }
+
+/**
+ * A log marker used for the serializer.
+ */
+private val MARKER = MarkerManager.getMarker("Replace Loot Serializer")
