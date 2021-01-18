@@ -61,7 +61,7 @@ public class DamageEffect extends Effect {
     @Override
     public boolean isReady(final int duration, final int amplifier) {
         final int time = this.baseTime >> amplifier;
-        return time > 0 ? duration % time == 0 : true;
+        return time <= 0 || duration % time == 0;
     }
 
     @Override
