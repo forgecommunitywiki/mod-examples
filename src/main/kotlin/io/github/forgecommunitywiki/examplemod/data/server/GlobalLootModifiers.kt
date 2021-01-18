@@ -39,14 +39,17 @@ import net.minecraftforge.common.data.GlobalLootModifierProvider
  * A provider used to generate loot modifiers as needed. These can either
  * replace, remove, or append items as specified by the modifier used.
  */
-class GlobalLootModifiers(gen: DataGenerator): GlobalLootModifierProvider(gen, MOD_ID) {
-
+class GlobalLootModifiers(gen: DataGenerator) : GlobalLootModifierProvider(gen, MOD_ID) {
     override fun start() {
         add("chicken_leg", REPLACE_LOOT.get(),
             ReplaceLootModifier(arrayOf(RandomChance.builder(0.4f).build()),
-                Items.CHICKEN, ItemStack(CHICKEN_LEG.get(), 2)))
+                Items.CHICKEN, ItemStack(CHICKEN_LEG.get(), 2)
+            )
+        )
         add("cooked_chicken_leg", REPLACE_LOOT.get(),
             ReplaceLootModifier(arrayOf(RandomChance.builder(0.3f).build()),
-                Items.COOKED_CHICKEN, ItemStack(COOKED_CHICKEN_LEG.get(), 2)))
+                Items.COOKED_CHICKEN, ItemStack(COOKED_CHICKEN_LEG.get(), 2)
+            )
+        )
     }
 }

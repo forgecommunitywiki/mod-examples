@@ -40,24 +40,24 @@ import net.minecraftforge.registries.ForgeRegistries
 import org.apache.logging.log4j.MarkerManager
 import kotlin.math.min
 
-
 /**
  * A loot modifier used to replace the target item with the associated
  * replacement if all the conditions have returned true.
  */
-class ReplaceLootModifier(conditions: Array<out ILootCondition>, private val target: Item, private val replacement: ItemStack)
-    : LootModifier(conditions) {
+class ReplaceLootModifier(conditions: Array<out ILootCondition>, private val target: Item, private val replacement: ItemStack) :
+    LootModifier(conditions) {
 
     override fun doApply(generatedLoot: MutableList<ItemStack>, context: LootContext?): MutableList<ItemStack> =
-        generatedLoot.asSequence().flatMap {
-            if(it.item == target) createStacks(it.count) else sequenceOf(it) }.toMutableList()
+        generatedLoot.asSequence()
+            .flatMap { if (it.item == target) createStacks(it.count) else sequenceOf(it) }
+            .toMutableList()
 
     /**
      * Creates the {@link ItemStack}(s) of the replacement and compresses them into
      * as few stacks as possible.
      *
-     * @param  count The number of stacks to produce
-     * @return       The compressed stack list
+     * @param count The number of stacks to produce
+     * @return The compressed stack list
      */
     private fun createStacks(count: Int): Sequence<ItemStack> = sequence {
         var remaining = count * replacement.count
@@ -71,21 +71,22 @@ class ReplaceLootModifier(conditions: Array<out ILootCondition>, private val tar
     /**
      * A serializer used to decode the JSON for our loot modifiers.
      */
-    class Serializer: GlobalLootModifierSerializer<ReplaceLootModifier>() {
-
+    internal class Serializer : GlobalLootModifierSerializer<ReplaceLootModifier>() {
         override fun read(location: ResourceLocation?, `object`: JsonObject, ailootcondition: Array<out ILootCondition>): ReplaceLootModifier =
-            ReplaceLootModifier(ailootcondition,
-            ForgeRegistries.ITEMS.getValue(ResourceLocation(JSONUtils.getString(`object`, "target")))!!,
-            ItemStack.CODEC.parse(JsonOps.INSTANCE, JSONUtils.getJsonObject(`object`, "replacement"))
-                .resultOrPartial { LOGGER.error(MARKER, "An error has occurred decoding the following replace loot modifier: {}", it) }
-                .orElseThrow { JsonParseException("The following replacement stack has been deserialized incorrectly.") })
+            ReplaceLootModifier(
+                ailootcondition,
+                ForgeRegistries.ITEMS.getValue(ResourceLocation(JSONUtils.getString(`object`, "target")))!!,
+                ItemStack.CODEC.parse(JsonOps.INSTANCE, JSONUtils.getJsonObject(`object`, "replacement"))
+                    .resultOrPartial { LOGGER.error(MARKER, "An error has occurred decoding the following replace loot modifier: {}", it) }
+                    .orElseThrow { JsonParseException("The following replacement stack has been deserialized incorrectly.") }
+            )
 
         override fun write(instance: ReplaceLootModifier): JsonObject =
             makeConditions(instance.conditions).also { json ->
-            json.addProperty("target", instance.target.registryName.toString())
-            ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, instance.replacement)
-                .resultOrPartial  { LOGGER.error(MARKER, "An error has occurred encoding the following replace loot modifier: {}", it) }
-                .ifPresent { json.add("replacement", it) }
+                json.addProperty("target", instance.target.registryName.toString())
+                ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, instance.replacement)
+                    .resultOrPartial { LOGGER.error(MARKER, "An error has occurred encoding the following replace loot modifier: {}", it) }
+                    .ifPresent { json.add("replacement", it) }
             }
     }
 }

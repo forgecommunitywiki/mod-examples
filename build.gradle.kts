@@ -1,11 +1,11 @@
-import java.time.format.DateTimeFormatter
-import java.time.Instant
 import net.minecraftforge.gradle.common.util.ModConfig
 import net.minecraftforge.gradle.common.util.RunConfig
 import net.minecraftforge.gradle.userdev.DependencyManagementExtension
 import net.minecraftforge.gradle.userdev.UserDevExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 buildscript {
     repositories {
@@ -41,9 +41,6 @@ ktlint {
     reporters {
         reporter(ReporterType.PLAIN)
         reporter(ReporterType.CHECKSTYLE)
-    }
-    filter {
-        exclude("**/build.gradle.kts")
     }
 }
 
@@ -141,7 +138,7 @@ tasks {
     named<Jar>("jar") {
         // Example for how to set properties within the manifest for reading by runtime
         manifest {
-            attributes (
+            attributes(
                     "Specification-Title" to "Example Mod",
                     "Specification-Vendor" to "Forge Community Wiki",
                     "Specification-Version" to project.version,

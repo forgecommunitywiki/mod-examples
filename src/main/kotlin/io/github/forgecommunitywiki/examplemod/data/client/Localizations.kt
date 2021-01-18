@@ -24,7 +24,21 @@
 
 package io.github.forgecommunitywiki.examplemod.data.client
 
-import io.github.forgecommunitywiki.examplemod.*
+import io.github.forgecommunitywiki.examplemod.CHICKEN_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.CHICKEN_LEG
+import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_LEG
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_ACACIA_LOG_HIT
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_BIRCH_LOG_HIT
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_CRIMSON_STEM_HIT
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_DARK_OAK_LOG_HIT
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_JUNGLE_LOG_HIT
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_OAK_LOG_HIT
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_SPRUCE_LOG_HIT
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK_WARPED_STEM_HIT
+import io.github.forgecommunitywiki.examplemod.INTERNAL_HEMORRHAGE
+import io.github.forgecommunitywiki.examplemod.INTERNAL_HEMORRHAGE_SOURCE
 import io.github.forgecommunitywiki.examplemod.MOD_ID
 import net.minecraft.data.DataGenerator
 import net.minecraft.util.DamageSource
@@ -37,15 +51,17 @@ import java.util.function.Supplier
  * determine the language such that the localizations can be standardized into
  * one file.
  */
-internal class Localizations(gen: DataGenerator, locale: String)
-    : LanguageProvider(gen, MOD_ID, locale) {
+internal class Localizations(gen: DataGenerator, locale: String) : LanguageProvider(gen, MOD_ID, locale) {
 
     override fun addTranslations() =
-        when(name.replace("Languages: ", "")) {
+        when (name.replace("Languages: ", "")) {
             "en_us" -> {
                 // Damage Sources
-                this.addDeathMessage(INTERNAL_HEMORRHAGE_SOURCE, "%1\$s internally bled to death",
-                    "%1\$s internally bled to death whilst fighting %2\$s")
+                this.addDeathMessage(
+                    INTERNAL_HEMORRHAGE_SOURCE,
+                    "%1\$s internally bled to death",
+                    "%1\$s internally bled to death whilst fighting %2\$s"
+                )
 
                 // Items
                 this.addItem(DRUMSTICK, "Drumstick")
@@ -69,7 +85,6 @@ internal class Localizations(gen: DataGenerator, locale: String)
             }
             else -> {}
         }
-
 
     /**
      * Adds a sound event subtitle by concatenating the namespace and path of
@@ -96,6 +111,6 @@ internal class Localizations(gen: DataGenerator, locale: String)
     private fun addDeathMessage(source: DamageSource, deathMessage: String, entityDeathMessage: String) =
         "death.attack.${source.damageType}".let {
             add(it, deathMessage)
-            add("${it}.player", entityDeathMessage)
+            add("$it.player", entityDeathMessage)
         }
 }

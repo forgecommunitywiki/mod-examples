@@ -24,8 +24,17 @@
 
 package io.github.forgecommunitywiki.examplemod.data.server
 
-import io.github.forgecommunitywiki.examplemod.*
-import net.minecraft.data.*
+import io.github.forgecommunitywiki.examplemod.CHICKEN_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.CHICKEN_LEG
+import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_LEG
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.MOD_ID
+import net.minecraft.data.CookingRecipeBuilder
+import net.minecraft.data.DataGenerator
+import net.minecraft.data.IFinishedRecipe
+import net.minecraft.data.RecipeProvider
+import net.minecraft.data.ShapedRecipeBuilder
 import net.minecraft.item.Items
 import net.minecraft.item.crafting.IRecipeSerializer
 import net.minecraft.item.crafting.Ingredient

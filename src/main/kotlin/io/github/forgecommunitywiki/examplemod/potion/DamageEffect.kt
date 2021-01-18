@@ -35,14 +35,15 @@ import net.minecraft.util.DamageSource
  * A class used to handle non-instantaneous damage effect logic when applied to
  * a specific entity.
  */
-open class DamageEffect(type: EffectType, liquidColor: Int, private val source: DamageSource, private val baseTime: Int, private val shouldRender: Boolean)
-    : Effect(type, liquidColor) {
+open class DamageEffect(type: EffectType, liquidColor: Int, private val source: DamageSource, private val baseTime: Int, private val shouldRender: Boolean) :
+    Effect(type, liquidColor) {
 
-    override fun performEffect(entity: LivingEntity, amplifier: Int) =
-        entity.attackEntityFrom(source, 1.0f).run {}
+    override fun performEffect(entity: LivingEntity, amplifier: Int) {
+        entity.attackEntityFrom(source, 1.0f)
+    }
 
     override fun isReady(duration: Int, amplifier: Int): Boolean =
-        (baseTime shr amplifier).let { if (it > 0) duration.rem(it) == 0 else true }
+        (baseTime shr amplifier).let { it <= 0 || duration.rem(it) == 0 }
 
     /**
      * Since this handles non-instantaneous effects, there should be no logic

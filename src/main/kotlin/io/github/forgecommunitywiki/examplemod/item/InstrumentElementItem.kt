@@ -31,7 +31,6 @@ import net.minecraft.util.ActionResultType
 import net.minecraft.util.SoundCategory
 import kotlin.math.pow
 
-
 /**
  * An instrument element used to play sounds on right click. It will choose a
  * random pitch to test the sound for.
