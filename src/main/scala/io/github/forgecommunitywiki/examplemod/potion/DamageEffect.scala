@@ -42,10 +42,7 @@ class DamageEffect(`type`: EffectType, liquidColor: Int, private final val sourc
         new Some(entity.attackEntityFrom(source, 1.0f)).map(_ => {}).get
 
     override def isReady(duration: Int, amplifier: Int): Boolean =
-        new Some(baseTime >> amplifier).map(i => 
-            if (i > 0) duration % i == 0
-            else true
-        ).get
+        new Some(baseTime >> amplifier).map(i => i <= 0 || duration % i == 0).get
 
     /**
      * Since this handles non-instantaneous effects, there should be no logic
