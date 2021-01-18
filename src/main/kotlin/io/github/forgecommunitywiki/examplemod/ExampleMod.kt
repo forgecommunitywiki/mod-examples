@@ -83,11 +83,11 @@ internal class ExampleMod {
     private fun attachProviders(event: GatherDataEvent) {
         val gen = event.generator
         val helper = event.existingFileHelper
-        if(event.includeClient()) {
+        if (event.includeClient()) {
            sequenceOf("en_us").forEach { locale -> gen.addProvider(Localizations(gen, locale)) }
             gen.addProvider(ItemModels(gen, helper))
         }
-        if(event.includeServer()) {
+        if (event.includeServer()) {
             gen.addProvider(Recipes(gen))
             gen.addProvider(GlobalLootModifiers(gen))
         }

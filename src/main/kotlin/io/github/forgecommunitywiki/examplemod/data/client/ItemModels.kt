@@ -24,7 +24,11 @@
 
 package io.github.forgecommunitywiki.examplemod.data.client
 
-import io.github.forgecommunitywiki.examplemod.*
+import io.github.forgecommunitywiki.examplemod.CHICKEN_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.CHICKEN_LEG
+import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_LEG
+import io.github.forgecommunitywiki.examplemod.DRUMSTICK
 import io.github.forgecommunitywiki.examplemod.MOD_ID
 import net.minecraft.data.DataGenerator
 import net.minecraft.item.Item
@@ -39,8 +43,8 @@ import java.util.function.Supplier
  * their item representations should be handled separately in a different model
  * provider.
  */
-internal class ItemModels(generator: DataGenerator, existingFileHelper: ExistingFileHelper)
-    : ItemModelProvider(generator, MOD_ID, existingFileHelper) {
+internal class ItemModels(generator: DataGenerator, existingFileHelper: ExistingFileHelper) :
+    ItemModelProvider(generator, MOD_ID, existingFileHelper) {
 
     override fun registerModels() {
         simpleItem(DRUMSTICK)
@@ -62,6 +66,6 @@ internal class ItemModels(generator: DataGenerator, existingFileHelper: Existing
     private fun simpleItem(itemSupplier: Supplier<out Item>) {
         val location = itemSupplier.get().registryName!!
         this.getBuilder(location.toString()).parent(ModelFile.UncheckedModelFile("item/generated"))
-            .texture("layer0", ResourceLocation(location.namespace, "${ITEM_FOLDER}/${location.path}"))
+            .texture("layer0", ResourceLocation(location.namespace, "$ITEM_FOLDER/${location.path}"))
     }
 }

@@ -29,26 +29,23 @@ import io.github.forgecommunitywiki.examplemod.loot.ReplaceLootModifier
 import io.github.forgecommunitywiki.examplemod.potion.DamageEffect
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
+import net.minecraft.item.Food
+import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
+import net.minecraft.potion.Effect
+import net.minecraft.potion.EffectInstance
 import net.minecraft.potion.EffectType
+import net.minecraft.potion.Effects
 import net.minecraft.util.DamageSource
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.SoundEvent
+import net.minecraft.util.SoundEvents
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.RegistryObject
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
-import net.minecraft.potion.EffectInstance
-
-import net.minecraft.item.Food
-import net.minecraft.item.Item
-import net.minecraft.potion.Effect
-
-import net.minecraft.potion.Effects
-import net.minecraft.util.SoundEvents
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer
-
 
 // Registers
 private val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID)
@@ -72,31 +69,34 @@ val COOKED_CHICKEN_DRUMSTICK_FOOD: Food = Food.Builder().hunger(4).saturation(0.
     .meat().build()
 
 // Items
-val DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("drumstick")
-{ object : InstrumentElementItem(Properties().group(ItemGroup.MISC).maxStackSize(2)) {
-    /**
-     * We implement the burn time here instead of as a method in the class as its
-     * completely unrelated to any data stored inside. It should be more of an item
-     * property, but since this is not the case, an anonymous class that adds the
-     * parameter when needed will work as well.
-     *
-     * @param  stack The stack being smelted
-     * @return       The burn time of the item in ticks
-     */
-    override fun getBurnTime(stack: ItemStack?): Int = 300
-} }
-val CHICKEN_LEG: RegistryObject<Item> = ITEMS.register("chicken_leg")
-    { Item(Item.Properties().group(ItemGroup.FOOD).food(CHICKEN_LEG_FOOD)) }
-val COOKED_CHICKEN_LEG: RegistryObject<Item> = ITEMS.register("cooked_chicken_leg")
-    { Item(Item.Properties().group(ItemGroup.FOOD).food(COOKED_CHICKEN_LEG_FOOD)) }
-val CHICKEN_DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("chicken_drumstick")
-    { InstrumentElementItem(Item.Properties().group(ItemGroup.MISC).maxStackSize(2).food(CHICKEN_DRUMSTICK_FOOD))}
-val COOKED_CHICKEN_DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("cooked_chicken_drumstick")
-    { InstrumentElementItem(Item.Properties().group(ItemGroup.MISC).maxStackSize(2).food(COOKED_CHICKEN_DRUMSTICK_FOOD))}
+val DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("drumstick") {
+    object : InstrumentElementItem(Properties().group(ItemGroup.MISC).maxStackSize(2)) {
+        /*
+         * We implement the burn time here instead of as a method in the class as its
+         * completely unrelated to any data stored inside. It should be more of an item
+         * property, but since this is not the case, an anonymous class that adds the
+         * parameter when needed will work as well
+         */
+        override fun getBurnTime(stack: ItemStack?): Int = 300
+    }
+}
+val CHICKEN_LEG: RegistryObject<Item> = ITEMS.register("chicken_leg") {
+    Item(Item.Properties().group(ItemGroup.FOOD).food(CHICKEN_LEG_FOOD))
+}
+val COOKED_CHICKEN_LEG: RegistryObject<Item> = ITEMS.register("cooked_chicken_leg") {
+    Item(Item.Properties().group(ItemGroup.FOOD).food(COOKED_CHICKEN_LEG_FOOD))
+}
+val CHICKEN_DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("chicken_drumstick") {
+    InstrumentElementItem(Item.Properties().group(ItemGroup.MISC).maxStackSize(2).food(CHICKEN_DRUMSTICK_FOOD))
+}
+val COOKED_CHICKEN_DRUMSTICK: RegistryObject<InstrumentElementItem> = ITEMS.register("cooked_chicken_drumstick") {
+    InstrumentElementItem(Item.Properties().group(ItemGroup.MISC).maxStackSize(2).food(COOKED_CHICKEN_DRUMSTICK_FOOD))
+}
 
 // Effects
-val INTERNAL_HEMORRHAGE: RegistryObject<Effect> = EFFECTS.register("internal_hemorrhage")
-    { DamageEffect(EffectType.HARMFUL, 0x9F0000, INTERNAL_HEMORRHAGE_SOURCE, 40, false) }
+val INTERNAL_HEMORRHAGE: RegistryObject<Effect> = EFFECTS.register("internal_hemorrhage") {
+    DamageEffect(EffectType.HARMFUL, 0x9F0000, INTERNAL_HEMORRHAGE_SOURCE, 40, false)
+}
 
 // Sound Events
 val DRUMSTICK_OAK_LOG_HIT = registerSoundEvent("instrument.drumstick.oak_log")
@@ -109,27 +109,33 @@ val DRUMSTICK_CRIMSON_STEM_HIT = registerSoundEvent("instrument.drumstick.crimso
 val DRUMSTICK_WARPED_STEM_HIT = registerSoundEvent("instrument.drumstick.warped_stem")
 
 // Global Loot Modifiers
-val REPLACE_LOOT: RegistryObject<GlobalLootModifierSerializer<ReplaceLootModifier>> = LOOT_MODIFIER_SERIALIZERS.register("replace") { ReplaceLootModifier.Serializer() }
+val REPLACE_LOOT: RegistryObject<GlobalLootModifierSerializer<ReplaceLootModifier>> = LOOT_MODIFIER_SERIALIZERS.register("replace", ReplaceLootModifier::Serializer)
 
 // Slave Maps
-private val ELEMENT_SOUNDS by lazy { mapOf(DRUMSTICK.get() to mapOf(
-    Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
-    Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
-    Blocks.SPRUCE_LOG to DRUMSTICK_SPRUCE_LOG_HIT.get(),
-    Blocks.JUNGLE_LOG to DRUMSTICK_JUNGLE_LOG_HIT.get(),
-    Blocks.ACACIA_LOG to DRUMSTICK_ACACIA_LOG_HIT.get(),
-    Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
-    Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
-    Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get()
-), CHICKEN_DRUMSTICK.get() to mapOf(
-    Blocks.STONE to SoundEvents.ENTITY_CHICKEN_HURT,
-    Blocks.GRANITE to SoundEvents.ENTITY_CHICKEN_HURT,
-    Blocks.DIORITE to SoundEvents.ENTITY_CHICKEN_HURT,
-    Blocks.ANDESITE to SoundEvents.ENTITY_CHICKEN_HURT
-), COOKED_CHICKEN_DRUMSTICK.get() to mapOf(
-    Blocks.GRASS_BLOCK to SoundEvents.ENTITY_CHICKEN_AMBIENT,
-    Blocks.DIRT to SoundEvents.ENTITY_CHICKEN_AMBIENT
-)) }
+private val ELEMENT_SOUNDS by lazy {
+    mapOf(
+        DRUMSTICK.get() to mapOf(
+            Blocks.OAK_LOG to DRUMSTICK_OAK_LOG_HIT.get(),
+            Blocks.BIRCH_LOG to DRUMSTICK_BIRCH_LOG_HIT.get(),
+            Blocks.SPRUCE_LOG to DRUMSTICK_SPRUCE_LOG_HIT.get(),
+            Blocks.JUNGLE_LOG to DRUMSTICK_JUNGLE_LOG_HIT.get(),
+            Blocks.ACACIA_LOG to DRUMSTICK_ACACIA_LOG_HIT.get(),
+            Blocks.DARK_OAK_LOG to DRUMSTICK_DARK_OAK_LOG_HIT.get(),
+            Blocks.CRIMSON_STEM to DRUMSTICK_CRIMSON_STEM_HIT.get(),
+            Blocks.WARPED_STEM to DRUMSTICK_WARPED_STEM_HIT.get()
+        ),
+        CHICKEN_DRUMSTICK.get() to mapOf(
+            Blocks.STONE to SoundEvents.ENTITY_CHICKEN_HURT,
+            Blocks.GRANITE to SoundEvents.ENTITY_CHICKEN_HURT,
+            Blocks.DIORITE to SoundEvents.ENTITY_CHICKEN_HURT,
+            Blocks.ANDESITE to SoundEvents.ENTITY_CHICKEN_HURT
+        ),
+        COOKED_CHICKEN_DRUMSTICK.get() to mapOf(
+            Blocks.GRASS_BLOCK to SoundEvents.ENTITY_CHICKEN_AMBIENT,
+            Blocks.DIRT to SoundEvents.ENTITY_CHICKEN_AMBIENT
+        )
+    )
+}
 
 /**
  * Registers the {@link DeferredRegister}s to the event bus.
@@ -155,19 +161,19 @@ internal fun registerSlaveMaps() {
 /**
  * Helper method to create a sound event as the names can be equivalent.
  *
- * @param  name The sound name as dictated within {@code sounds.json}.
- * @return      The sound event registry object
+ * @param name The sound name as dictated within {@code sounds.json}.
+ * @return The sound event registry object
  */
-private fun registerSoundEvent(name: String) : RegistryObject<SoundEvent> =
+private fun registerSoundEvent(name: String): RegistryObject<SoundEvent> =
     SOUND_EVENTS.register(name) { SoundEvent(ResourceLocation(MOD_ID, name)) }
 
 /**
  * Grabs the instrument element sound according to the block hit. Returns null
  * if there is no sound present.
  *
- * @param  item     The item hitting the block
- * @param  hitBlock The block being hit
- * @return          The sound played if the block is hit, null otherwise
+ * @param item The item hitting the block
+ * @param hitBlock The block being hit
+ * @return The sound played if the block is hit, null otherwise
  */
 fun getInstrumentElementSounds(item: InstrumentElementItem, hitBlock: Block): SoundEvent? =
     ELEMENT_SOUNDS.getOrDefault(item, mapOf())[hitBlock]

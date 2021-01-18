@@ -31,12 +31,12 @@ import net.minecraft.util.ResourceLocation
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
 import org.apache.logging.log4j.LogManager
-import java.util.*
 
 /**
  * Global gson instance.
  */
 internal val GSON = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
+
 /**
  * Global logger instance.
  */
@@ -45,13 +45,12 @@ internal val LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod")
 /**
  * Creates a codec that converts a string to the specified registry.
  *
- * @param  <V>                  A forge supported registry entry type
- * @param  registry             The forge registry
- * @return                      A codec for the specific registry
- * @throws NullPointerException If the registry is null
+ * @param <V> A forge supported registry entry type
+ * @param registry The forge registry
+ * @return A codec for the specific registry
  */
-internal fun <V: IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V> =
+internal fun <V : IForgeRegistryEntry<V>> registryCodec(registry: IForgeRegistry<out V>): Codec<V> =
     ResourceLocation.CODEC.comapFlatMap({ loc ->
-        if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
+        if (registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
         else DataResult.error("Not a valid registry object within ${registry.registryName}: $loc")
     }, IForgeRegistryEntry<V>::getRegistryName)

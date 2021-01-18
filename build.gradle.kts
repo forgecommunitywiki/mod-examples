@@ -1,8 +1,11 @@
+import net.minecraftforge.gradle.common.util.ModConfig
+import net.minecraftforge.gradle.common.util.RunConfig
+import net.minecraftforge.gradle.userdev.DependencyManagementExtension
+import net.minecraftforge.gradle.userdev.UserDevExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.time.format.DateTimeFormatter
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.time.Instant
-import net.minecraftforge.gradle.common.util.*
-import net.minecraftforge.gradle.userdev.*
+import java.time.format.DateTimeFormatter
 
 buildscript {
     repositories {
@@ -17,6 +20,7 @@ buildscript {
 plugins {
     idea
     kotlin("jvm") version "1.4.21"
+    id("org.jlleitschuh.gradle.ktlint") version "9.2.0" // not latest intentionally
 }
 apply(plugin = "net.minecraftforge.gradle")
 
@@ -24,6 +28,21 @@ apply(plugin = "net.minecraftforge.gradle")
 version = "1.0.0.0"
 group = "io.github.forgecommunitywiki" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 base.archivesBaseName = "examplemod"
+
+ktlint {
+    version.set("0.37.2")
+    debug.set(true)
+    verbose.set(true)
+    android.set(false)
+    outputToConsole.set(true)
+    ignoreFailures.set(false)
+    enableExperimentalRules.set(true)
+    disabledRules.set(setOf("indent")) // Disable indentation checks because they prove to be annoying more than useful
+    reporters {
+        reporter(ReporterType.PLAIN)
+        reporter(ReporterType.CHECKSTYLE)
+    }
+}
 
 configure<UserDevExtension> {
     // The mappings can be changed at any time, and must be in the following format.
@@ -119,7 +138,7 @@ tasks {
     named<Jar>("jar") {
         // Example for how to set properties within the manifest for reading by runtime
         manifest {
-            attributes (
+            attributes(
                     "Specification-Title" to "Example Mod",
                     "Specification-Vendor" to "Forge Community Wiki",
                     "Specification-Version" to project.version,
