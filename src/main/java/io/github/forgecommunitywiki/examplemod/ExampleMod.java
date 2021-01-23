@@ -27,10 +27,8 @@ package io.github.forgecommunitywiki.examplemod;
 import java.util.stream.Stream;
 
 import io.github.forgecommunitywiki.examplemod.client.ClientHandler;
-import io.github.forgecommunitywiki.examplemod.data.client.ItemModels;
-import io.github.forgecommunitywiki.examplemod.data.client.Localizations;
-import io.github.forgecommunitywiki.examplemod.data.server.GlobalLootModifiers;
-import io.github.forgecommunitywiki.examplemod.data.server.Recipes;
+import io.github.forgecommunitywiki.examplemod.data.client.*;
+import io.github.forgecommunitywiki.examplemod.data.server.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -89,10 +87,12 @@ public final class ExampleMod {
         if (event.includeClient()) {
             Stream.of("en_us").forEach(locale -> gen.addProvider(new Localizations(gen, locale)));
             gen.addProvider(new ItemModels(gen, helper));
+            gen.addProvider(new BlockStates(gen, helper));
         }
         if (event.includeServer()) {
             gen.addProvider(new Recipes(gen));
             gen.addProvider(new GlobalLootModifiers(gen));
+            gen.addProvider(new LootTables(gen));
         }
     }
 }

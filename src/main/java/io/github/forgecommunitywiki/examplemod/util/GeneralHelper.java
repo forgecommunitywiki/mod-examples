@@ -24,7 +24,8 @@
 
 package io.github.forgecommunitywiki.examplemod.util;
 
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,12 @@ import com.google.gson.GsonBuilder;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -51,6 +57,26 @@ public class GeneralHelper {
      * Global logger instance.
      */
     public static final Logger LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod");
+
+    /**
+     * Creates a map of voxel shapes rotated to their specific axis.
+     *
+     * @param  shape The {@link Axis#Y} voxel shape
+     * @return       A axis to voxel shape map
+     */
+    public static Map<Axis, VoxelShape> createAxisShapes(final VoxelShape shape) {
+        return Util.make(new EnumMap<>(Axis.class), map -> {
+            final List<AxisAlignedBB> boxes = shape.toBoundingBoxList().stream()
+                    .map(box -> new AxisAlignedBB(box.minX, 1 - box.maxZ, box.minY, box.maxX, 1 - box.minZ, box.maxY))
+                    .collect(Collectors.toList());
+
+            map.put(Axis.X, boxes.stream()
+                    .map(box -> VoxelShapes.create(1 - box.maxZ, box.minY, box.minX, 1 - box.minZ, box.maxY, box.maxX))
+                    .reduce(VoxelShapes.empty(), VoxelShapes::or));
+            map.put(Axis.Y, shape);
+            map.put(Axis.Z, boxes.stream().map(VoxelShapes::create).reduce(VoxelShapes.empty(), VoxelShapes::or));
+        });
+    }
 
     /**
      * Creates a codec that converts a string to the specified registry.

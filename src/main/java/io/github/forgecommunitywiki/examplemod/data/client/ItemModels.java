@@ -52,6 +52,14 @@ public class ItemModels extends ItemModelProvider {
         this.simpleItem(GeneralRegistrar.COOKED_CHICKEN_LEG);
         this.simpleItem(GeneralRegistrar.CHICKEN_DRUMSTICK);
         this.simpleItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.OAK_LOG_DRUM_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.BIRCH_LOG_DRUM_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.SPRUCE_LOG_DRUM_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.JUNGLE_LOG_DRUM_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.ACACIA_LOG_DRUM_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.DARK_OAK_LOG_DRUM_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.CRIMSON_STEM_DRUM_DRUMSTICK);
+        this.simpleItem(GeneralRegistrar.WARPED_STEM_DRUM_DRUMSTICK);
     }
 
     /**

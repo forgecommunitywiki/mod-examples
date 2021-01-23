@@ -24,35 +24,32 @@
 
 package io.github.forgecommunitywiki.examplemod.item;
 
-import io.github.forgecommunitywiki.examplemod.GeneralRegistrar;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import io.github.forgecommunitywiki.examplemod.block.IWrappedState;
+import net.minecraft.block.Block;
+import net.minecraft.item.*;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 
 /**
- * An instrument element used to play sounds on right click. It will choose a
- * random pitch to test the sound for.
+ * A {@link BlockItem} that borrows the properties of a wrapped instance held
+ * within {@link IWrappedState}.
+ *
+ * @param <T> A block that implements {@link IWrappedState}.
  */
-public class InstrumentElementItem extends Item {
+public class WrappedBlockItem<T extends Block & IWrappedState> extends BlockItem {
 
-    public InstrumentElementItem(final Properties properties) {
-        super(properties);
+    public WrappedBlockItem(final T block, final Properties builder) {
+        super(block, builder);
     }
 
     /**
-     * Plays the sound on item use for the specific block.
+     * Used to mimic the properties of the wrapped block. For example, a block that
+     * holds an oak log will have the same burn time as the oak log.
      */
+    @SuppressWarnings("deprecation") // Forge deprecation, only used to get vanilla burn times
     @Override
-    public ActionResultType onItemUse(final ItemUseContext context) {
-        final World world = context.getWorld();
-        final BlockPos pos = context.getPos();
-        return GeneralRegistrar.getInstrumentElementSounds(this, world.getBlockState(pos).getBlock()).map(sound -> {
-            world.playSound(context.getPlayer(), pos, sound, SoundCategory.BLOCKS, 0.1f,
-                    (float) Math.pow(2d, (Item.random.nextInt(24) - 12) / 12d));
-            return ActionResultType.func_233537_a_(world.isRemote);
-        }).orElse(super.onItemUse(context));
+    public int getBurnTime(final ItemStack itemStack) {
+        final Item item = ((IWrappedState) this.getBlock()).getWrappedState().getBlock().asItem();
+        final int time = item.getBurnTime(itemStack);
+        return time == -1 ? AbstractFurnaceTileEntity.getBurnTimes().getOrDefault(item, -1) : time;
     }
 }

@@ -26,12 +26,13 @@ package io.github.forgecommunitywiki.examplemod.data.server;
 
 import java.util.function.Consumer;
 
-import io.github.forgecommunitywiki.examplemod.ExampleMod;
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -47,53 +48,109 @@ public class Recipes extends RecipeProvider {
     @Override
     protected void registerRecipes(final Consumer<IFinishedRecipe> consumer) {
         // Shaped Crafting
-        ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.DRUMSTICK.get()).patternLine("  X").patternLine(" X ")
-                .patternLine("X  ").key('X', Items.STICK).addCriterion("has_item", RecipeProvider.hasItem(Items.STICK))
-                .build(consumer);
-        ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.CHICKEN_DRUMSTICK.get()).patternLine("  C").patternLine(" X ")
-                .patternLine("X  ").key('X', Items.BONE).key('C', GeneralRegistrar.CHICKEN_LEG.get())
-                .addCriterion("has_item", RecipeProvider.hasItem(Items.BONE))
-                .addCriterion("has_item_2", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get())).build(consumer);
-        ShapedRecipeBuilder.shapedRecipe(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get()).patternLine("  C")
-                .patternLine(" X ").patternLine("X  ").key('X', Items.BONE)
-                .key('C', GeneralRegistrar.COOKED_CHICKEN_LEG.get())
-                .addCriterion("has_item", RecipeProvider.hasItem(Items.BONE))
-                .addCriterion("has_item_2", RecipeProvider.hasItem(GeneralRegistrar.COOKED_CHICKEN_LEG.get()))
-                .build(consumer);
+        this.addDrumRecipe(Blocks.OAK_LOG, GeneralRegistrar.OAK_LOG_DRUM.get(), consumer);
+        this.addDrumRecipe(Blocks.BIRCH_LOG, GeneralRegistrar.BIRCH_LOG_DRUM.get(), consumer);
+        this.addDrumRecipe(Blocks.SPRUCE_LOG, GeneralRegistrar.SPRUCE_LOG_DRUM.get(), consumer);
+        this.addDrumRecipe(Blocks.JUNGLE_LOG, GeneralRegistrar.JUNGLE_LOG_DRUM.get(), consumer);
+        this.addDrumRecipe(Blocks.ACACIA_LOG, GeneralRegistrar.ACACIA_LOG_DRUM.get(), consumer);
+        this.addDrumRecipe(Blocks.DARK_OAK_LOG, GeneralRegistrar.DARK_OAK_LOG_DRUM.get(), consumer);
+        this.addDrumRecipe(Blocks.CRIMSON_STEM, GeneralRegistrar.CRIMSON_STEM_DRUM.get(), consumer);
+        this.addDrumRecipe(Blocks.WARPED_STEM, GeneralRegistrar.WARPED_STEM_DRUM.get(), consumer);
+
+        this.addDrumstickRecipe(Items.STICK, Items.STICK, GeneralRegistrar.DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.CHICKEN_LEG.get(), Items.BONE,
+                GeneralRegistrar.CHICKEN_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.COOKED_CHICKEN_LEG.get(), Items.BONE,
+                GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.OAK_LOG_DRUM.get(), Items.STICK,
+                GeneralRegistrar.OAK_LOG_DRUM_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.BIRCH_LOG_DRUM.get(), Items.STICK,
+                GeneralRegistrar.BIRCH_LOG_DRUM_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.SPRUCE_LOG_DRUM.get(), Items.STICK,
+                GeneralRegistrar.SPRUCE_LOG_DRUM_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.JUNGLE_LOG_DRUM.get(), Items.STICK,
+                GeneralRegistrar.JUNGLE_LOG_DRUM_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.ACACIA_LOG_DRUM.get(), Items.STICK,
+                GeneralRegistrar.ACACIA_LOG_DRUM_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.DARK_OAK_LOG_DRUM.get(), Items.STICK,
+                GeneralRegistrar.DARK_OAK_LOG_DRUM_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.CRIMSON_STEM_DRUM.get(), Items.STICK,
+                GeneralRegistrar.CRIMSON_STEM_DRUM_DRUMSTICK.get(), consumer);
+        this.addDrumstickRecipe(GeneralRegistrar.WARPED_STEM_DRUM.get(), Items.STICK,
+                GeneralRegistrar.WARPED_STEM_DRUM_DRUMSTICK.get(), consumer);
 
         // Smelting
-        CookingRecipeBuilder
-                .smeltingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_LEG.get()),
-                        GeneralRegistrar.COOKED_CHICKEN_LEG.get(), 0.18f, 100)
-                .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get())).build(consumer);
-        CookingRecipeBuilder
-                .smeltingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_DRUMSTICK.get()),
-                        GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(), 0.09f, 175)
-                .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get()))
-                .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_drumstick_from_smelting"));
+        this.addFoodRecipes(GeneralRegistrar.CHICKEN_LEG.get(), GeneralRegistrar.COOKED_CHICKEN_LEG.get(), 0.18f, 100,
+                consumer);
+        this.addFoodRecipes(GeneralRegistrar.CHICKEN_DRUMSTICK.get(), GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(),
+                0.09f, 175, consumer);
+    }
 
-        // Smoking
-        CookingRecipeBuilder
-                .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_LEG.get()),
-                        GeneralRegistrar.COOKED_CHICKEN_LEG.get(), 0.18f, 50, IRecipeSerializer.SMOKING)
-                .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get()))
-                .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_leg_from_smoking"));
-        CookingRecipeBuilder
-                .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_DRUMSTICK.get()),
-                        GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(), 0.09f, 88, IRecipeSerializer.SMOKING)
-                .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get()))
-                .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_drumstick_from_smoking"));
+    /**
+     * Creates a drum for the associated recipe.
+     *
+     * @param material The material used to make the drum
+     * @param result   The resulting drum
+     * @param consumer A consumer to provide the finished recipe
+     */
+    protected void addDrumRecipe(final IItemProvider material, final IItemProvider result,
+            final Consumer<IFinishedRecipe> consumer) {
+        if (material.asItem() != Blocks.NOTE_BLOCK.asItem())
+            ShapedRecipeBuilder.shapedRecipe(result).patternLine("XXX").patternLine("XNX").patternLine("XXX")
+                    .key('X', material).key('N', Blocks.NOTE_BLOCK)
+                    .addCriterion("has_material", RecipeProvider.hasItem(material))
+                    .addCriterion("has_note_block", RecipeProvider.hasItem(Blocks.NOTE_BLOCK)).build(consumer);
+        else
+            ShapedRecipeBuilder.shapedRecipe(result).patternLine("XXX").patternLine("XXX").patternLine("XXX")
+                    .key('X', Blocks.NOTE_BLOCK)
+                    .addCriterion("has_note_block", RecipeProvider.hasItem(Blocks.NOTE_BLOCK)).build(consumer);
+    }
 
-        // Campfire Cooking
+    /**
+     * Creates a drumstick for the associated recipe.
+     *
+     * @param head     The item used for the head of the drumstick
+     * @param handle   The handle item of the drumstick
+     * @param result   The resulting drumstick
+     * @param consumer A consumer to provide the finished recipe
+     */
+    protected void addDrumstickRecipe(final IItemProvider head, final IItemProvider handle, final IItemProvider result,
+            final Consumer<IFinishedRecipe> consumer) {
+        if (head.asItem() != handle.asItem())
+            ShapedRecipeBuilder.shapedRecipe(result).patternLine("  C").patternLine(" X ").patternLine("X  ")
+                    .key('X', handle).key('C', head).addCriterion("has_head", RecipeProvider.hasItem(head))
+                    .addCriterion("has_handle", RecipeProvider.hasItem(handle)).build(consumer);
+        else
+            ShapedRecipeBuilder.shapedRecipe(result).patternLine("  X").patternLine(" X ").patternLine("X  ")
+                    .key('X', handle).addCriterion("has_handle", RecipeProvider.hasItem(handle)).build(consumer);
+    }
+
+    /**
+     * Adds the associated food smelting recipes for the specified input and output
+     * (smelting, smoking, and campfire cooking).
+     *
+     * @param input        The item being smelted
+     * @param result       The smelting result
+     * @param experience   The amount of experience for smelting
+     * @param smeltingTime The amount of time it takes to smelt the item in a
+     *                     furnace, all other times are calculated from this number
+     * @param consumer     A consumer to provide the finished recipe
+     */
+    protected void addFoodRecipes(final IItemProvider input, final IItemProvider result, final float experience,
+            final int smeltingTime, final Consumer<IFinishedRecipe> consumer) {
+        final ResourceLocation loc = result.asItem().getRegistryName();
+        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(input), result, experience, smeltingTime)
+                .addCriterion("has_food", RecipeProvider.hasItem(input))
+                .build(consumer, new ResourceLocation(loc.getNamespace(), loc.getPath() + "_from_smelting"));
         CookingRecipeBuilder
-                .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_LEG.get()),
-                        GeneralRegistrar.COOKED_CHICKEN_LEG.get(), 0.18f, 300, IRecipeSerializer.CAMPFIRE_COOKING)
-                .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_LEG.get()))
-                .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_leg_from_campfire_cooking"));
+                .cookingRecipe(Ingredient.fromItems(input), result, experience, smeltingTime / 2,
+                        IRecipeSerializer.SMOKING)
+                .addCriterion("has_food", RecipeProvider.hasItem(input))
+                .build(consumer, new ResourceLocation(loc.getNamespace(), loc.getPath() + "_from_smoking"));
         CookingRecipeBuilder
-                .cookingRecipe(Ingredient.fromItems(GeneralRegistrar.CHICKEN_DRUMSTICK.get()),
-                        GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(), 0.09f, 525, IRecipeSerializer.CAMPFIRE_COOKING)
-                .addCriterion("has_item", RecipeProvider.hasItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get()))
-                .build(consumer, new ResourceLocation(ExampleMod.ID, "cooked_chicken_drumstick_from_campfire_cooking"));
+                .cookingRecipe(Ingredient.fromItems(input), result, experience, smeltingTime * 3,
+                        IRecipeSerializer.CAMPFIRE_COOKING)
+                .addCriterion("has_food", RecipeProvider.hasItem(input))
+                .build(consumer, new ResourceLocation(loc.getNamespace(), loc.getPath() + "_from_campfire_cooking"));
     }
 }

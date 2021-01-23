@@ -25,16 +25,27 @@
 package io.github.forgecommunitywiki.examplemod;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-import io.github.forgecommunitywiki.examplemod.item.InstrumentElementItem;
+import javax.annotation.Nullable;
+
+import io.github.forgecommunitywiki.examplemod.block.IWrappedState;
+import io.github.forgecommunitywiki.examplemod.block.RotatedInstrumentBlock;
+import io.github.forgecommunitywiki.examplemod.item.*;
 import io.github.forgecommunitywiki.examplemod.loot.ReplaceLootModifier;
 import io.github.forgecommunitywiki.examplemod.potion.DamageEffect;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import io.github.forgecommunitywiki.examplemod.util.GeneralHelper;
+import net.minecraft.block.*;
 import net.minecraft.item.*;
 import net.minecraft.potion.*;
 import net.minecraft.util.*;
+import net.minecraft.util.Direction.Axis;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -56,6 +67,16 @@ public final class GeneralRegistrar {
     private static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIER_SERIALIZERS = DeferredRegister
             .create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, ExampleMod.ID);
 
+    // Voxel Shapes
+    public static final Map<Axis, VoxelShape> DRUM_SHAPES = GeneralHelper
+            .createAxisShapes(VoxelShapes.or(Block.makeCuboidShape(1, 0, 1, 15, 16, 15),
+                    Block.makeCuboidShape(5, 0, 0, 11, 16, 16), Block.makeCuboidShape(0, 0, 5, 16, 16, 11)));
+
+    // Item Properties
+    public static final Item.Properties DECORATIONS = new Item.Properties().group(ItemGroup.DECORATIONS);
+    public static final Item.Properties DRUMSTICK_PROPERTIES = new Item.Properties().group(ItemGroup.MISC)
+            .maxStackSize(2);
+
     // Damage Sources
     public static final DamageSource INTERNAL_HEMORRHAGE_SOURCE = new DamageSource("internal_hemorrhage")
             .setDamageBypassesArmor();
@@ -71,33 +92,99 @@ public final class GeneralRegistrar {
             .effect(() -> new EffectInstance(GeneralRegistrar.INTERNAL_HEMORRHAGE.get(), 300, 0, false, false), 0.6f)
             .meat().build();
 
+    // Blocks
+    public static final RegistryObject<RotatedInstrumentBlock> OAK_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
+            "oak_log_drum",
+            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.OAK_LOG.getDefaultState()),
+                    GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.OAK_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
+            () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> BIRCH_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
+            "birch_log_drum",
+            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.BIRCH_LOG.getDefaultState()),
+                    GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.BIRCH_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
+            () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> SPRUCE_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
+            "spruce_log_drum",
+            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.SPRUCE_LOG.getDefaultState()),
+                    GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.SPRUCE_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
+            () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> JUNGLE_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
+            "jungle_log_drum",
+            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.JUNGLE_LOG.getDefaultState()),
+                    GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.JUNGLE_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
+            () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> ACACIA_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
+            "acacia_log_drum",
+            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.ACACIA_LOG.getDefaultState()),
+                    GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.ACACIA_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
+            () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> DARK_OAK_LOG_DRUM = GeneralRegistrar
+            .registerWrappedBlock("dark_oak_log_drum", () -> new RotatedInstrumentBlock(
+                    Lazy.of(() -> Blocks.DARK_OAK_LOG.getDefaultState()), GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.DARK_OAK_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
+                    () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> CRIMSON_STEM_DRUM = GeneralRegistrar
+            .registerWrappedBlock("crimson_stem_drum", () -> new RotatedInstrumentBlock(
+                    Lazy.of(() -> Blocks.CRIMSON_STEM.getDefaultState()), GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.CRIMSON_STEM).harvestLevel(0).harvestTool(ToolType.AXE)),
+                    () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> WARPED_STEM_DRUM = GeneralRegistrar.registerWrappedBlock(
+            "warped_stem_drum",
+            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.WARPED_STEM.getDefaultState()),
+                    GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(Blocks.WARPED_STEM).harvestLevel(0).harvestTool(ToolType.AXE)),
+            () -> GeneralRegistrar.DECORATIONS);
+
     // Items
-    public static final RegistryObject<InstrumentElementItem> DRUMSTICK = GeneralRegistrar.ITEMS.register("drumstick",
-            () -> new InstrumentElementItem(new Item.Properties().group(ItemGroup.MISC).maxStackSize(2)) {
-                /**
-                 * We implement the burn time here instead of as a method in the class as its
-                 * completely unrelated to any data stored inside. It should be more of an item
-                 * property, but since this is not the case, an anonymous class that adds the
-                 * parameter when needed will work as well.
-                 *
-                 * @param  stack The stack being smelted
-                 * @return       The burn time of the item in ticks
-                 */
-                @Override
-                public int getBurnTime(final ItemStack stack) {
-                    return 300;
-                }
-            });
+    public static final RegistryObject<InstrumentItem> DRUMSTICK = GeneralRegistrar.ITEMS.register("drumstick",
+            () -> new InstrumentItem(300, GeneralRegistrar.DRUMSTICK_PROPERTIES));
     public static final RegistryObject<Item> CHICKEN_LEG = GeneralRegistrar.ITEMS.register("chicken_leg",
             () -> new Item(new Item.Properties().group(ItemGroup.FOOD).food(GeneralRegistrar.CHICKEN_LEG_FOOD)));
     public static final RegistryObject<Item> COOKED_CHICKEN_LEG = GeneralRegistrar.ITEMS.register("cooked_chicken_leg",
             () -> new Item(new Item.Properties().group(ItemGroup.FOOD).food(GeneralRegistrar.COOKED_CHICKEN_LEG_FOOD)));
-    public static final RegistryObject<InstrumentElementItem> CHICKEN_DRUMSTICK = GeneralRegistrar.ITEMS
-            .register("chicken_drumstick", () -> new InstrumentElementItem(new Item.Properties().group(ItemGroup.MISC)
-                    .maxStackSize(2).food(GeneralRegistrar.CHICKEN_DRUMSTICK_FOOD)));
-    public static final RegistryObject<InstrumentElementItem> COOKED_CHICKEN_DRUMSTICK = GeneralRegistrar.ITEMS
-            .register("cooked_chicken_drumstick", () -> new InstrumentElementItem(new Item.Properties()
+    public static final RegistryObject<GlobalInstrumentItem> CHICKEN_DRUMSTICK = GeneralRegistrar.ITEMS.register(
+            "chicken_drumstick",
+            () -> new GlobalInstrumentItem(() -> SoundEvents.ENTITY_CHICKEN_HURT, new Item.Properties()
+                    .group(ItemGroup.MISC).maxStackSize(2).food(GeneralRegistrar.CHICKEN_DRUMSTICK_FOOD)));
+    public static final RegistryObject<GlobalInstrumentItem> COOKED_CHICKEN_DRUMSTICK = GeneralRegistrar.ITEMS.register(
+            "cooked_chicken_drumstick",
+            () -> new GlobalInstrumentItem(() -> SoundEvents.ENTITY_CHICKEN_AMBIENT, new Item.Properties()
                     .group(ItemGroup.MISC).maxStackSize(2).food(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK_FOOD)));
+    public static final RegistryObject<GlobalInstrumentItem> OAK_LOG_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("oak_log_drum_drumstick", () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_OAK_LOG_HIT,
+                    500, GeneralRegistrar.DRUMSTICK_PROPERTIES));
+    public static final RegistryObject<GlobalInstrumentItem> BIRCH_LOG_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS.register(
+            "birch_log_drum_drumstick", () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_BIRCH_LOG_HIT, 500,
+                    GeneralRegistrar.DRUMSTICK_PROPERTIES));
+    public static final RegistryObject<GlobalInstrumentItem> SPRUCE_LOG_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("spruce_log_drum_drumstick",
+                    () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_SPRUCE_LOG_HIT, 500,
+                            GeneralRegistrar.DRUMSTICK_PROPERTIES));
+    public static final RegistryObject<GlobalInstrumentItem> JUNGLE_LOG_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("jungle_log_drum_drumstick",
+                    () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_JUNGLE_LOG_HIT, 500,
+                            GeneralRegistrar.DRUMSTICK_PROPERTIES));
+    public static final RegistryObject<GlobalInstrumentItem> ACACIA_LOG_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("acacia_log_drum_drumstick",
+                    () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_ACACIA_LOG_HIT, 500,
+                            GeneralRegistrar.DRUMSTICK_PROPERTIES));
+    public static final RegistryObject<GlobalInstrumentItem> DARK_OAK_LOG_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("dark_oak_log_drum_drumstick",
+                    () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_DARK_OAK_LOG_HIT, 500,
+                            GeneralRegistrar.DRUMSTICK_PROPERTIES));
+    public static final RegistryObject<GlobalInstrumentItem> CRIMSON_STEM_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("crimson_stem_drum_drumstick",
+                    () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_CRIMSON_STEM_HIT, 150,
+                            GeneralRegistrar.DRUMSTICK_PROPERTIES));
+    public static final RegistryObject<GlobalInstrumentItem> WARPED_STEM_DRUM_DRUMSTICK = GeneralRegistrar.ITEMS
+            .register("warped_stem_drum_drumstick",
+                    () -> new GlobalInstrumentItem(GeneralRegistrar.DRUMSTICK_WARPED_STEM_HIT, 150,
+                            GeneralRegistrar.DRUMSTICK_PROPERTIES));
 
     // Effects
     public static final RegistryObject<Effect> INTERNAL_HEMORRHAGE = GeneralRegistrar.EFFECTS
@@ -121,13 +208,15 @@ public final class GeneralRegistrar {
             .registerSoundEvent("instrument.drumstick.crimson_stem");
     public static final RegistryObject<SoundEvent> DRUMSTICK_WARPED_STEM_HIT = GeneralRegistrar
             .registerSoundEvent("instrument.drumstick.warped_stem");
+    public static final RegistryObject<SoundEvent> DRUM_TEST_HIT = GeneralRegistrar
+            .registerSoundEvent("instrument.drum.test");
 
     // Global Loot Modifiers
     public static final RegistryObject<GlobalLootModifierSerializer<ReplaceLootModifier>> REPLACE_LOOT = GeneralRegistrar.LOOT_MODIFIER_SERIALIZERS
             .register("replace", ReplaceLootModifier.Serializer::new);
 
     // Slave Maps
-    private static final Map<InstrumentElementItem, Map<Block, SoundEvent>> ELEMENT_SOUNDS = new HashMap<>();
+    private static final Map<InstrumentItem, Map<Block, SoundEvent>> ELEMENT_SOUNDS = new HashMap<>();
 
     /**
      * Registers the {@link DeferredRegister}s to the event bus.
@@ -156,18 +245,46 @@ public final class GeneralRegistrar {
             map.put(Blocks.CRIMSON_STEM, GeneralRegistrar.DRUMSTICK_CRIMSON_STEM_HIT.get());
             map.put(Blocks.WARPED_STEM, GeneralRegistrar.DRUMSTICK_WARPED_STEM_HIT.get());
         }));
-        GeneralRegistrar.ELEMENT_SOUNDS.put(GeneralRegistrar.CHICKEN_DRUMSTICK.get(),
-                Util.make(new HashMap<>(), map -> {
-                    map.put(Blocks.STONE, SoundEvents.ENTITY_CHICKEN_HURT);
-                    map.put(Blocks.GRANITE, SoundEvents.ENTITY_CHICKEN_HURT);
-                    map.put(Blocks.DIORITE, SoundEvents.ENTITY_CHICKEN_HURT);
-                    map.put(Blocks.ANDESITE, SoundEvents.ENTITY_CHICKEN_HURT);
-                }));
-        GeneralRegistrar.ELEMENT_SOUNDS.put(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get(),
-                Util.make(new HashMap<>(), map -> {
-                    map.put(Blocks.GRASS_BLOCK, SoundEvents.ENTITY_CHICKEN_AMBIENT);
-                    map.put(Blocks.DIRT, SoundEvents.ENTITY_CHICKEN_AMBIENT);
-                }));
+    }
+
+    /**
+     * @return A collection of registered blocks.
+     */
+    public static Collection<RegistryObject<Block>> getBlocks() { return GeneralRegistrar.BLOCKS.getEntries(); }
+
+    /**
+     * Helper method to create a block holding a wrapped block with an associated
+     * item.
+     *
+     * @param  <T>            A block type that implements {@link IWrappedState}
+     * @param  name           The registry name of the block
+     * @param  block          A supplied, new block instance
+     * @param  itemProperties A supplied instance of the item properties, cannot be
+     *                        called directly due to
+     *                        {@link Item.Properties#containerItem(Item)}
+     * @return                The block registry object
+     */
+    private static <T extends Block & IWrappedState> RegistryObject<T> registerWrappedBlock(final String name,
+            final Supplier<T> block, final Supplier<Item.Properties> itemProperties) {
+        return GeneralRegistrar.registerBlock(name, block, b -> new WrappedBlockItem<>(b, itemProperties.get()));
+    }
+
+    /**
+     * Helper method to create a block with an associated item if applicable.
+     *
+     * @param  <T>   A block type
+     * @param  name  The registry name of the block
+     * @param  block A supplied, new block instance
+     * @param  item  A function that takes in the block and outputs a new item
+     *               instance
+     * @return       The block registry object
+     */
+    private static <T extends Block> RegistryObject<T> registerBlock(final String name, final Supplier<T> block,
+            @Nullable final Function<T, Item> item) {
+        final RegistryObject<T> obj = GeneralRegistrar.BLOCKS.register(name, block);
+        if (item != null)
+            GeneralRegistrar.ITEMS.register(name, () -> item.apply(obj.get()));
+        return obj;
     }
 
     /**
@@ -189,8 +306,7 @@ public final class GeneralRegistrar {
      * @param  hitBlock The block being hit
      * @return          The sound played if the block is hit, an optional otherwise
      */
-    public static Optional<SoundEvent> getInstrumentElementSounds(final InstrumentElementItem item,
-            final Block hitBlock) {
+    public static Optional<SoundEvent> getInstrumentElementSounds(final InstrumentItem item, final Block hitBlock) {
         return Optional
                 .ofNullable(GeneralRegistrar.ELEMENT_SOUNDS.getOrDefault(item, Collections.emptyMap()).get(hitBlock));
     }
