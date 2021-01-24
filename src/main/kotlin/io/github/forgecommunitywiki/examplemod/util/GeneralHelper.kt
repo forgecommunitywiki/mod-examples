@@ -27,7 +27,11 @@ package io.github.forgecommunitywiki.examplemod.util
 import com.google.gson.GsonBuilder
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import net.minecraft.util.Direction
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.shapes.VoxelShape
+import net.minecraft.util.math.shapes.VoxelShapes
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
 import org.apache.logging.log4j.LogManager
@@ -41,6 +45,26 @@ internal val GSON = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().crea
  * Global logger instance.
  */
 internal val LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod")
+
+/**
+ * Creates a map of voxel shapes rotated to their specific axis.
+ *
+ * @param shape The {@link Axis#Y} voxel shape
+ * @return A axis to voxel shape map
+ */
+internal fun createAxisShapes(shape: VoxelShape): Map<Direction.Axis, VoxelShape> {
+    val boxes = shape.toBoundingBoxList()
+        .map { box -> AxisAlignedBB(box.minX, 1 - box.maxZ, box.minY, box.maxX, 1 - box.minZ, box.maxY) }
+        .asSequence()
+
+    return mapOf(
+        Direction.Axis.X to (boxes
+            .map { box -> VoxelShapes.create(1 - box.maxZ, box.minY, box.minX, 1 - box.minZ, box.maxY, box.maxX) }
+            .reduceOrNull(VoxelShapes::or) ?: VoxelShapes.empty()),
+        Direction.Axis.Y to shape,
+        Direction.Axis.Z to (boxes.map(VoxelShapes::create).reduceOrNull(VoxelShapes::or) ?: VoxelShapes.empty())
+    )
+}
 
 /**
  * Creates a codec that converts a string to the specified registry.

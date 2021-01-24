@@ -24,19 +24,26 @@
 
 package io.github.forgecommunitywiki.examplemod.data.client
 
+import io.github.forgecommunitywiki.examplemod.ACACIA_LOG_DRUM_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.BIRCH_LOG_DRUM_DRUMSTICK
 import io.github.forgecommunitywiki.examplemod.CHICKEN_DRUMSTICK
 import io.github.forgecommunitywiki.examplemod.CHICKEN_LEG
 import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_DRUMSTICK
 import io.github.forgecommunitywiki.examplemod.COOKED_CHICKEN_LEG
+import io.github.forgecommunitywiki.examplemod.CRIMSON_STEM_DRUM_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.DARK_OAK_LOG_DRUM_DRUMSTICK
 import io.github.forgecommunitywiki.examplemod.DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.JUNGLE_LOG_DRUM_DRUMSTICK
 import io.github.forgecommunitywiki.examplemod.MOD_ID
+import io.github.forgecommunitywiki.examplemod.OAK_LOG_DRUM_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.SPRUCE_LOG_DRUM_DRUMSTICK
+import io.github.forgecommunitywiki.examplemod.WARPED_STEM_DRUM_DRUMSTICK
 import net.minecraft.data.DataGenerator
 import net.minecraft.item.Item
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.generators.ItemModelProvider
 import net.minecraftforge.client.model.generators.ModelFile
 import net.minecraftforge.common.data.ExistingFileHelper
-import java.util.function.Supplier
 
 /**
  * A provider used to generate item models for specifically items. Blocks and
@@ -47,11 +54,19 @@ internal class ItemModels(generator: DataGenerator, existingFileHelper: Existing
     ItemModelProvider(generator, MOD_ID, existingFileHelper) {
 
     override fun registerModels() {
-        simpleItem(DRUMSTICK)
-        simpleItem(CHICKEN_LEG)
-        simpleItem(COOKED_CHICKEN_LEG)
-        simpleItem(CHICKEN_DRUMSTICK)
-        simpleItem(COOKED_CHICKEN_DRUMSTICK)
+        simpleItem(DRUMSTICK.get())
+        simpleItem(CHICKEN_LEG.get())
+        simpleItem(COOKED_CHICKEN_LEG.get())
+        simpleItem(CHICKEN_DRUMSTICK.get())
+        simpleItem(COOKED_CHICKEN_DRUMSTICK.get())
+        simpleItem(OAK_LOG_DRUM_DRUMSTICK.get())
+        simpleItem(BIRCH_LOG_DRUM_DRUMSTICK.get())
+        simpleItem(SPRUCE_LOG_DRUM_DRUMSTICK.get())
+        simpleItem(JUNGLE_LOG_DRUM_DRUMSTICK.get())
+        simpleItem(ACACIA_LOG_DRUM_DRUMSTICK.get())
+        simpleItem(DARK_OAK_LOG_DRUM_DRUMSTICK.get())
+        simpleItem(CRIMSON_STEM_DRUM_DRUMSTICK.get())
+        simpleItem(WARPED_STEM_DRUM_DRUMSTICK.get())
     }
 
     /**
@@ -61,11 +76,11 @@ internal class ItemModels(generator: DataGenerator, existingFileHelper: Existing
      * We do not use () -> Item here as in the Kotlin language due to the
      * {@code RegistryObject} wrapper.
      *
-     * @param itemSupplier The item to generate the model for
+     * @param item The item to generate the model for
      */
-    private fun simpleItem(itemSupplier: Supplier<out Item>) {
-        val location = itemSupplier.get().registryName!!
-        this.getBuilder(location.toString()).parent(ModelFile.UncheckedModelFile("item/generated"))
-            .texture("layer0", ResourceLocation(location.namespace, "$ITEM_FOLDER/${location.path}"))
-    }
+    private fun simpleItem(item: Item) =
+        item.registryName!!.let {
+            this.getBuilder(it.toString()).parent(ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", ResourceLocation(it.namespace, "$ITEM_FOLDER/${it.path}"))
+        }
 }

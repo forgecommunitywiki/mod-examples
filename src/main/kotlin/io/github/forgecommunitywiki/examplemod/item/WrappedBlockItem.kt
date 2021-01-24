@@ -24,29 +24,29 @@
 
 package io.github.forgecommunitywiki.examplemod.item
 
-import io.github.forgecommunitywiki.examplemod.getInstrumentElementSounds
-import net.minecraft.item.Item
-import net.minecraft.item.ItemUseContext
-import net.minecraft.util.ActionResultType
-import net.minecraft.util.SoundCategory
-import kotlin.math.pow
+import io.github.forgecommunitywiki.examplemod.block.IWrappedState
+import net.minecraft.block.Block
+import net.minecraft.item.BlockItem
+import net.minecraft.item.ItemStack
+import net.minecraft.tileentity.AbstractFurnaceTileEntity
 
 /**
- * An instrument element used to play sounds on right click. It will choose a
- * random pitch to test the sound for.
+ * A {@link BlockItem} that borrows the properties of a wrapped instance held
+ * within {@link IWrappedState}.
  */
-open class InstrumentElementItem(properties: Properties) : Item(properties) {
+class WrappedBlockItem<out T : Block>(block: T, properties: Properties) : BlockItem(block, properties)
+    where T : IWrappedState {
 
     /**
-     * Plays the sound on item use for the specific block.
+     * Used to mimic the properties of the wrapped block. For example, a block that
+     * holds an oak log will have the same burn time as the oak log.
      */
-    override fun onItemUse(context: ItemUseContext): ActionResultType {
-        val world = context.world
-        val pos = context.pos
-        return getInstrumentElementSounds(this, world.getBlockState(pos).block)?.let {
-            world.playSound(context.player, pos, it, SoundCategory.BLOCKS, 0.1f,
-                2.0.pow((random.nextInt(24) - 12) / 12.0).toFloat())
-            ActionResultType.func_233537_a_(world.isRemote)
-        } ?: super.onItemUse(context)
+    @Suppress("DEPRECATION") // Forge deprecation, only used to get vanilla burn times
+    override fun getBurnTime(itemStack: ItemStack?): Int {
+        val item = (this.block as IWrappedState).getWrappedState().block.asItem()
+        return item.getBurnTime(itemStack).let {
+            if (it == -1) AbstractFurnaceTileEntity.getBurnTimes().getOrDefault(item, -1)
+            else it
+        }
     }
 }

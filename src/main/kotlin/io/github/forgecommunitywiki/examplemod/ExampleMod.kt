@@ -25,9 +25,11 @@
 package io.github.forgecommunitywiki.examplemod
 
 import io.github.forgecommunitywiki.examplemod.client.initClient
+import io.github.forgecommunitywiki.examplemod.data.client.BlockStates
 import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
 import io.github.forgecommunitywiki.examplemod.data.client.Localizations
 import io.github.forgecommunitywiki.examplemod.data.server.GlobalLootModifiers
+import io.github.forgecommunitywiki.examplemod.data.server.LootTables
 import io.github.forgecommunitywiki.examplemod.data.server.Recipes
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.common.MinecraftForge
@@ -86,10 +88,12 @@ internal class ExampleMod {
         if (event.includeClient()) {
            sequenceOf("en_us").forEach { locale -> gen.addProvider(Localizations(gen, locale)) }
             gen.addProvider(ItemModels(gen, helper))
+            gen.addProvider(BlockStates(gen, helper))
         }
         if (event.includeServer()) {
             gen.addProvider(Recipes(gen))
             gen.addProvider(GlobalLootModifiers(gen))
+            gen.addProvider(LootTables(gen))
         }
     }
 }
