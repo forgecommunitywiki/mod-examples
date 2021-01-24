@@ -65,7 +65,7 @@ public class InstrumentItem extends Item {
     public ActionResultType onItemUse(final ItemUseContext context) {
         final World world = context.getWorld();
         final BlockPos pos = context.getPos();
-        return this.getInstrumentSound(world.getBlockState(pos)).map(sound -> {
+        return this.getInstrumentSound(context.getItem(), world.getBlockState(pos)).map(sound -> {
             world.playSound(context.getPlayer(), pos, sound, SoundCategory.BLOCKS, 0.1f,
                     (float) Math.pow(2d, (Item.random.nextInt(24) - 12) / 12d));
             return ActionResultType.func_233537_a_(world.isRemote);
@@ -75,11 +75,14 @@ public class InstrumentItem extends Item {
     /**
      * Gets an optional of the instrument sound to play if present.
      *
+     * @param  stack The stack hitting the block
      * @param  state The state of the block being hit
      * @return       An {@link Optional} containing the sound event if available
      */
-    public Optional<SoundEvent> getInstrumentSound(final BlockState state) {
-        return GeneralRegistrar.getInstrumentElementSounds(this, state.getBlock());
+    public Optional<SoundEvent> getInstrumentSound(final ItemStack stack, final BlockState state) {
+        return stack.getItem() instanceof InstrumentItem
+                ? GeneralRegistrar.getInstrumentElementSounds((InstrumentItem) stack.getItem(), state.getBlock())
+                : Optional.empty();
     }
 
     @Override

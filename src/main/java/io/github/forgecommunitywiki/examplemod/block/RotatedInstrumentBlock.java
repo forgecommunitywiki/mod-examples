@@ -73,11 +73,7 @@ public class RotatedInstrumentBlock extends RotatedPillarBlock implements IWater
 
     public RotatedInstrumentBlock(final Supplier<BlockState> instrumentMaterial, final VoxelShape shape,
             final Properties properties) {
-        super(properties);
-        this.instrumentMaterial = instrumentMaterial;
-        this.setDefaultState(this.getDefaultState().with(RotatedInstrumentBlock.NOTE, 0)
-                .with(RotatedInstrumentBlock.WATERLOGGED, false));
-        this.shapes = GeneralHelper.createAxisShapes(shape);
+        this(instrumentMaterial, GeneralHelper.createAxisShapes(shape), properties);
     }
 
     /**
@@ -122,7 +118,7 @@ public class RotatedInstrumentBlock extends RotatedPillarBlock implements IWater
             final PlayerEntity player, final Hand hand, final BlockRayTraceResult hit) {
         if (state.get(RotatedPillarBlock.AXIS) == hit.getFace().getAxis())
             return Optional.of(player.getHeldItem(hand)).filter(s -> s.getItem() instanceof InstrumentItem)
-                    .flatMap(s -> ((InstrumentItem) s.getItem()).getInstrumentSound(this.getWrappedState()))
+                    .flatMap(s -> ((InstrumentItem) s.getItem()).getInstrumentSound(s, this.getWrappedState()))
                     .map(s -> this.playNote(state, world, pos, player, s)).orElseGet(() -> {
                         final BlockState current = state.func_235896_a_(RotatedInstrumentBlock.NOTE);
                         if (!world.isRemote)
@@ -143,7 +139,7 @@ public class RotatedInstrumentBlock extends RotatedPillarBlock implements IWater
      * @param  sound  The sound the block makes
      * @return        A successful or consumed result
      */
-    public ActionResultType playNote(final BlockState state, final World world, final BlockPos pos,
+    private ActionResultType playNote(final BlockState state, final World world, final BlockPos pos,
             final PlayerEntity player, final SoundEvent sound) {
         final int pitch = state.get(RotatedInstrumentBlock.NOTE);
         world.playSound(player, pos, sound, SoundCategory.BLOCKS, 1.0f, (float) Math.pow(2d, (pitch - 12) / 12d));

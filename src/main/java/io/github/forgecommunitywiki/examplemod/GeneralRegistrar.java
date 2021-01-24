@@ -30,7 +30,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import io.github.forgecommunitywiki.examplemod.block.IWrappedState;
 import io.github.forgecommunitywiki.examplemod.block.RotatedInstrumentBlock;
 import io.github.forgecommunitywiki.examplemod.item.*;
 import io.github.forgecommunitywiki.examplemod.loot.ReplaceLootModifier;
@@ -68,13 +67,13 @@ public final class GeneralRegistrar {
             .create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, ExampleMod.ID);
 
     // Voxel Shapes
-    public static final Map<Axis, VoxelShape> DRUM_SHAPES = GeneralHelper
+    private static final Map<Axis, VoxelShape> DRUM_SHAPES = GeneralHelper
             .createAxisShapes(VoxelShapes.or(Block.makeCuboidShape(1, 0, 1, 15, 16, 15),
                     Block.makeCuboidShape(5, 0, 0, 11, 16, 16), Block.makeCuboidShape(0, 0, 5, 16, 16, 11)));
 
     // Item Properties
-    public static final Item.Properties DECORATIONS = new Item.Properties().group(ItemGroup.DECORATIONS);
-    public static final Item.Properties DRUMSTICK_PROPERTIES = new Item.Properties().group(ItemGroup.MISC)
+    private static final Item.Properties DECORATIONS = new Item.Properties().group(ItemGroup.DECORATIONS);
+    private static final Item.Properties DRUMSTICK_PROPERTIES = new Item.Properties().group(ItemGroup.MISC)
             .maxStackSize(2);
 
     // Damage Sources
@@ -93,52 +92,22 @@ public final class GeneralRegistrar {
             .meat().build();
 
     // Blocks
-    public static final RegistryObject<RotatedInstrumentBlock> OAK_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
-            "oak_log_drum",
-            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.OAK_LOG.getDefaultState()),
-                    GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.OAK_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
-            () -> GeneralRegistrar.DECORATIONS);
-    public static final RegistryObject<RotatedInstrumentBlock> BIRCH_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
-            "birch_log_drum",
-            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.BIRCH_LOG.getDefaultState()),
-                    GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.BIRCH_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
-            () -> GeneralRegistrar.DECORATIONS);
-    public static final RegistryObject<RotatedInstrumentBlock> SPRUCE_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
-            "spruce_log_drum",
-            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.SPRUCE_LOG.getDefaultState()),
-                    GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.SPRUCE_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
-            () -> GeneralRegistrar.DECORATIONS);
-    public static final RegistryObject<RotatedInstrumentBlock> JUNGLE_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
-            "jungle_log_drum",
-            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.JUNGLE_LOG.getDefaultState()),
-                    GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.JUNGLE_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
-            () -> GeneralRegistrar.DECORATIONS);
-    public static final RegistryObject<RotatedInstrumentBlock> ACACIA_LOG_DRUM = GeneralRegistrar.registerWrappedBlock(
-            "acacia_log_drum",
-            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.ACACIA_LOG.getDefaultState()),
-                    GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.ACACIA_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
-            () -> GeneralRegistrar.DECORATIONS);
+    public static final RegistryObject<RotatedInstrumentBlock> OAK_LOG_DRUM = GeneralRegistrar.registerRotatedInstrumentBlock(
+            "oak_log_drum", () -> Blocks.OAK_LOG);
+    public static final RegistryObject<RotatedInstrumentBlock> BIRCH_LOG_DRUM = GeneralRegistrar.registerRotatedInstrumentBlock(
+            "birch_log_drum", () -> Blocks.BIRCH_LOG);
+    public static final RegistryObject<RotatedInstrumentBlock> SPRUCE_LOG_DRUM = GeneralRegistrar.registerRotatedInstrumentBlock(
+            "spruce_log_drum", () -> Blocks.SPRUCE_LOG);
+    public static final RegistryObject<RotatedInstrumentBlock> JUNGLE_LOG_DRUM = GeneralRegistrar.registerRotatedInstrumentBlock(
+            "jungle_log_drum", () -> Blocks.JUNGLE_LOG);
+    public static final RegistryObject<RotatedInstrumentBlock> ACACIA_LOG_DRUM = GeneralRegistrar.registerRotatedInstrumentBlock(
+            "acacia_log_drum", () -> Blocks.ACACIA_LOG);
     public static final RegistryObject<RotatedInstrumentBlock> DARK_OAK_LOG_DRUM = GeneralRegistrar
-            .registerWrappedBlock("dark_oak_log_drum", () -> new RotatedInstrumentBlock(
-                    Lazy.of(() -> Blocks.DARK_OAK_LOG.getDefaultState()), GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.DARK_OAK_LOG).harvestLevel(0).harvestTool(ToolType.AXE)),
-                    () -> GeneralRegistrar.DECORATIONS);
+            .registerRotatedInstrumentBlock("dark_oak_log_drum", () -> Blocks.DARK_OAK_LOG);
     public static final RegistryObject<RotatedInstrumentBlock> CRIMSON_STEM_DRUM = GeneralRegistrar
-            .registerWrappedBlock("crimson_stem_drum", () -> new RotatedInstrumentBlock(
-                    Lazy.of(() -> Blocks.CRIMSON_STEM.getDefaultState()), GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.CRIMSON_STEM).harvestLevel(0).harvestTool(ToolType.AXE)),
-                    () -> GeneralRegistrar.DECORATIONS);
-    public static final RegistryObject<RotatedInstrumentBlock> WARPED_STEM_DRUM = GeneralRegistrar.registerWrappedBlock(
-            "warped_stem_drum",
-            () -> new RotatedInstrumentBlock(Lazy.of(() -> Blocks.WARPED_STEM.getDefaultState()),
-                    GeneralRegistrar.DRUM_SHAPES,
-                    AbstractBlock.Properties.from(Blocks.WARPED_STEM).harvestLevel(0).harvestTool(ToolType.AXE)),
-            () -> GeneralRegistrar.DECORATIONS);
+            .registerRotatedInstrumentBlock("crimson_stem_drum", () -> Blocks.CRIMSON_STEM);
+    public static final RegistryObject<RotatedInstrumentBlock> WARPED_STEM_DRUM = GeneralRegistrar.registerRotatedInstrumentBlock(
+            "warped_stem_drum", () -> Blocks.WARPED_STEM);
 
     // Items
     public static final RegistryObject<InstrumentItem> DRUMSTICK = GeneralRegistrar.ITEMS.register("drumstick",
@@ -253,20 +222,19 @@ public final class GeneralRegistrar {
     public static Collection<RegistryObject<Block>> getBlocks() { return GeneralRegistrar.BLOCKS.getEntries(); }
 
     /**
-     * Helper method to create a block holding a wrapped block with an associated
-     * item.
+     * Creates a rotated instrument block using the specified material.
      *
-     * @param  <T>            A block type that implements {@link IWrappedState}
-     * @param  name           The registry name of the block
-     * @param  block          A supplied, new block instance
-     * @param  itemProperties A supplied instance of the item properties, cannot be
-     *                        called directly due to
-     *                        {@link Item.Properties#containerItem(Item)}
-     * @return                The block registry object
+     * @param  name     The registry name of the block
+     * @param  material The material of the instrument block
+     * @return          The block registry object
      */
-    private static <T extends Block & IWrappedState> RegistryObject<T> registerWrappedBlock(final String name,
-            final Supplier<T> block, final Supplier<Item.Properties> itemProperties) {
-        return GeneralRegistrar.registerBlock(name, block, b -> new WrappedBlockItem<>(b, itemProperties.get()));
+    private static RegistryObject<RotatedInstrumentBlock> registerRotatedInstrumentBlock(final String name,
+            final Supplier<? extends Block> material) {
+        return GeneralRegistrar.registerBlock(name, () -> {
+            final Block block = material.get();
+            return new RotatedInstrumentBlock(Lazy.of(() -> block.getDefaultState()), GeneralRegistrar.DRUM_SHAPES,
+                    AbstractBlock.Properties.from(block).harvestLevel(0).harvestTool(ToolType.AXE));
+        }, b -> new WrappedBlockItem<>(b, GeneralRegistrar.DECORATIONS));
     }
 
     /**

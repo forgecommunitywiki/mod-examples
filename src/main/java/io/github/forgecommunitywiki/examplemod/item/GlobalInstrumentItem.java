@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -63,7 +64,7 @@ public class GlobalInstrumentItem extends InstrumentItem {
     }
 
     @Override
-    public Optional<SoundEvent> getInstrumentSound(final BlockState state) {
+    public Optional<SoundEvent> getInstrumentSound(final ItemStack stack, final BlockState state) {
         return this.sound.resolve();
     }
 }

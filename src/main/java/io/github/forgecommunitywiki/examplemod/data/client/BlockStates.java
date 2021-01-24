@@ -45,6 +45,10 @@ public class BlockStates extends BlockStateProvider {
             .extend(BlockStates.toTexture(Blocks.QUARTZ_BLOCK), "_side");
     private static final ResourceLocation CYAN_TERRACOTTA = BlockStates.toTexture(Blocks.CYAN_TERRACOTTA);
 
+    // Model Locations
+    private static final ResourceLocation DRUM_BLOCK_TEMPLATE = new ResourceLocation(ExampleMod.ID,
+            ModelProvider.BLOCK_FOLDER + "/drum_block_template");
+
     public BlockStates(final DataGenerator gen, final ExistingFileHelper exFileHelper) {
         super(gen, ExampleMod.ID, exFileHelper);
     }
@@ -89,8 +93,7 @@ public class BlockStates extends BlockStateProvider {
             final ResourceLocation side, final ResourceLocation drum, final ResourceLocation rim) {
         final RotatedPillarBlock block = drumSupplier.get();
         final BlockModelBuilder model = this.models()
-                .withExistingParent(block.getRegistryName().toString(),
-                        new ResourceLocation(ExampleMod.ID, ModelProvider.BLOCK_FOLDER + "/drum_block_template"))
+                .withExistingParent(block.getRegistryName().toString(), BlockStates.DRUM_BLOCK_TEMPLATE)
                 .texture("side", side).texture("drum", drum).texture("rim", rim);
         this.axisBlock(block, model, model);
         this.simpleBlockItem(block, model);
