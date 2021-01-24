@@ -39,7 +39,7 @@ class DamageEffect(`type`: EffectType, liquidColor: Int, private final val sourc
     extends Effect(`type`, liquidColor) {
 
     override def performEffect(entity: LivingEntity, amplifier: Int): Unit =
-        new Some(entity.attackEntityFrom(source, 1.0f)).map(_ => {}).get
+        entity.attackEntityFrom(source, 1.0f)
 
     override def isReady(duration: Int, amplifier: Int): Boolean =
         new Some(baseTime >> amplifier).map(i => i <= 0 || duration % i == 0).get

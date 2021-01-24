@@ -46,5 +46,11 @@
         "sounds": [
             "examplemod:drumstick/warped_stem"
         ]
+    },
+    "instrument.drum.test": {
+        "subtitle": "examplemod.instrument.drum.test",
+        "sounds": [
+            "examplemod:drum/test"
+        ]
     }
 }

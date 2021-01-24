@@ -37,6 +37,8 @@ import io.github.forgecommunitywiki.examplemod.data.client.ItemModels
 import io.github.forgecommunitywiki.examplemod.data.client.Localizations
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import io.github.forgecommunitywiki.examplemod.data.server.GlobalLootModifiers
+import io.github.forgecommunitywiki.examplemod.data.client.BlockStates
+import io.github.forgecommunitywiki.examplemod.data.server.LootTables
 
 /**
  * The main class used to handle any registration or common events associated
@@ -45,7 +47,7 @@ import io.github.forgecommunitywiki.examplemod.data.server.GlobalLootModifiers
 @Mod(ExampleMod.ID)
 class ExampleMod {
 
-    private val mod = FMLJavaModLoadingContext.get().getModEventBus()
+    private val mod = FMLJavaModLoadingContext.get.getModEventBus
     private val forge = MinecraftForge.EVENT_BUS
 
     // Initialize physical client
@@ -66,7 +68,7 @@ class ExampleMod {
      * @param event The common setup event
      */
     private def commonSetup(event: FMLCommonSetupEvent): Unit = {
-        GeneralRegistrar.registerSlaveMaps()
+        GeneralRegistrar.registerSlaveMaps
     }
 
     /**
@@ -75,15 +77,17 @@ class ExampleMod {
      * @param event The data generator event
      */
     private def attachProviders(event: GatherDataEvent): Unit = {
-        val gen = event.getGenerator()
-        val helper = event.getExistingFileHelper()
-        if(event.includeClient()) {
+        val gen = event.getGenerator
+        val helper = event.getExistingFileHelper
+        if(event.includeClient) {
             ("en_us" #:: LazyList.empty).foreach(locale => gen.addProvider(new Localizations(gen, locale)))
             gen.addProvider(new ItemModels(gen, helper))
+            gen.addProvider(new BlockStates(gen, helper))
         }
-        if(event.includeServer()) {
+        if(event.includeServer) {
             gen.addProvider(new Recipes(gen))
             gen.addProvider(new GlobalLootModifiers(gen))
+            gen.addProvider(new LootTables(gen))
         }
     }
 }

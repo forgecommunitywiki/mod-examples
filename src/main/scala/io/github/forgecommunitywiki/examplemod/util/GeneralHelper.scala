@@ -25,12 +25,17 @@
 package io.github.forgecommunitywiki.examplemod.util
 
 import com.google.gson.GsonBuilder
+import scala.jdk.CollectionConverters._
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
 import net.minecraft.util.ResourceLocation
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.Codec
 import org.apache.logging.log4j.LogManager
+import net.minecraft.util.math.shapes.VoxelShape
+import net.minecraft.util.Direction.Axis
+import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.math.shapes.VoxelShapes
 
 /**
  * Holds non-specific utilities used within the mod.
@@ -40,11 +45,29 @@ object GeneralHelper {
     /**
      * Global gson instance.
      */
-    final val GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
+    final val GSON = new GsonBuilder().disableHtmlEscaping.setPrettyPrinting.create
     /**
      * Global logger instance.
      */
     final val LOGGER = LogManager.getLogger("Forge Community Wiki - Example Mod")
+
+    /**
+     * Creates a map of voxel shapes rotated to their specific axis.
+     *
+     * @param shape The {@link Axis#Y} voxel shape
+     * @return A axis to voxel shape map
+     */
+    def createAxisShapes(shape: VoxelShape): Map[Axis, VoxelShape] = {
+        val boxes = shape.toBoundingBoxList.asScala
+            .map(box => new AxisAlignedBB(box.minX, 1 - box.maxZ, box.minY, box.maxX, 1 - box.minZ, box.maxY))
+
+        Map(
+            Axis.X -> boxes.map(box => VoxelShapes.create(1 - box.maxZ, box.minY, box.minX, 1 - box.minZ, box.maxY, box.maxX))
+                .reduceOption(VoxelShapes.or).getOrElse(VoxelShapes.empty),
+            Axis.Y -> shape,
+            Axis.Z -> boxes.map(VoxelShapes.create).reduceOption(VoxelShapes.or).getOrElse(VoxelShapes.empty)
+        )
+    }
 
     /**
     * Creates a codec that converts a string to the specified registry.
@@ -57,6 +80,6 @@ object GeneralHelper {
     def registryCodec[V <: IForgeRegistryEntry[V]](registry: IForgeRegistry[V]) : Codec[V] =
         ResourceLocation.CODEC.comapFlatMap(loc => 
             if(registry.containsKey(loc)) DataResult.success(registry.getValue(loc))
-            else DataResult.error("Not a valid registry object within " + registry.getRegistryName() + ": " + loc)
-        , entry => entry.getRegistryName())
+            else DataResult.error("Not a valid registry object within " + registry.getRegistryName + ": " + loc)
+        , _.getRegistryName)
 }

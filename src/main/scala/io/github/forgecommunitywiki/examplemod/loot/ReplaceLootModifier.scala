@@ -54,7 +54,7 @@ class ReplaceLootModifier(conditions: Array[ILootCondition], private final val t
 
     override protected def doApply(generatedLoot: ju.List[ItemStack], context: LootContext): ju.List[ItemStack] = 
         generatedLoot.asScala.flatMap(s => 
-            if(s.getItem() == target) createStack(s.getCount() * replacement.getCount())
+            if(s.getItem == target) createStack(s.getCount * replacement.getCount)
             else s #:: LazyList.empty).asJava
 
     /**
@@ -67,8 +67,8 @@ class ReplaceLootModifier(conditions: Array[ILootCondition], private final val t
     private def createStack(count: Int): LazyList[ItemStack] =
         if (count <= 0) LazyList.empty
         else {
-            val stackCount = count.min(replacement.getMaxStackSize())
-            new Some(replacement.copy()).map(s => {
+            val stackCount = count.min(replacement.getMaxStackSize)
+            new Some(replacement.copy).map(s => {
                 s.setCount(stackCount)
                 s
             }).get #:: createStack(count - stackCount)
@@ -87,7 +87,7 @@ object ReplaceLootModifier {
         // TODO: Seems as though private members cannot be accessed from nested classes
         override def write(instance: ReplaceLootModifier): JsonObject =
             new Some(makeConditions(instance.conditionsIn)).map(json => {
-                json.addProperty("target", instance.target.getRegistryName().toString())
+                json.addProperty("target", instance.target.getRegistryName.toString)
                 ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, instance.replacement)
                     .resultOrPartial((s: String) => GeneralHelper.LOGGER.error("An error has occurred encoding the following replace loot modifier: {}", s))
                     .ifPresent((e: JsonElement) => json.add("replacement", e))

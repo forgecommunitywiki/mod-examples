@@ -22,29 +22,29 @@
  * SOFTWARE.
  */
 
-package io.github.forgecommunitywiki.examplemod.data.server
+package io.github.forgecommunitywiki.examplemod.data.server.loot
 
-import net.minecraft.data.DataGenerator
-import net.minecraftforge.common.data.GlobalLootModifierProvider
-import io.github.forgecommunitywiki.examplemod.ExampleMod
+import scala.jdk.CollectionConverters._
+import net.minecraft.data.loot.BlockLootTables
+import net.minecraft.block.Block
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
-import io.github.forgecommunitywiki.examplemod.loot.ReplaceLootModifier
-import net.minecraft.loot.conditions.RandomChance
-import net.minecraft.item.Items
-import net.minecraft.item.ItemStack
 
 /**
- * A provider used to generate loot modifiers as needed. These can either
- * replace, remove, or append items as specified by the modifier used.
+ * A class used to register loot tables associated with blocks.
  */
-class GlobalLootModifiers(gen: DataGenerator) extends GlobalLootModifierProvider(gen, ExampleMod.ID) {
+class BlockTables extends BlockLootTables {
 
-    override def start: Unit = {
-        add("chicken_leg", GeneralRegistrar.REPLACE_LOOT.get,
-            new ReplaceLootModifier(Array(RandomChance.builder(0.4f).build),
-                Items.CHICKEN, new ItemStack(GeneralRegistrar.CHICKEN_LEG.get, 2)))
-        add("cooked_chicken_leg", GeneralRegistrar.REPLACE_LOOT.get,
-            new ReplaceLootModifier(Array(RandomChance.builder(0.3f).build),
-                Items.COOKED_CHICKEN, new ItemStack(GeneralRegistrar.COOKED_CHICKEN_LEG.get, 2)))
+    override protected def addTables: Unit = {
+        this.registerDropSelfLootTable(GeneralRegistrar.OAK_LOG_DRUM.get)
+        this.registerDropSelfLootTable(GeneralRegistrar.BIRCH_LOG_DRUM.get)
+        this.registerDropSelfLootTable(GeneralRegistrar.SPRUCE_LOG_DRUM.get)
+        this.registerDropSelfLootTable(GeneralRegistrar.JUNGLE_LOG_DRUM.get)
+        this.registerDropSelfLootTable(GeneralRegistrar.ACACIA_LOG_DRUM.get)
+        this.registerDropSelfLootTable(GeneralRegistrar.DARK_OAK_LOG_DRUM.get)
+        this.registerDropSelfLootTable(GeneralRegistrar.CRIMSON_STEM_DRUM.get)
+        this.registerDropSelfLootTable(GeneralRegistrar.WARPED_STEM_DRUM.get)  
     }
+
+    override protected def getKnownBlocks: java.lang.Iterable[Block] =
+        GeneralRegistrar.getBlocks.map(_.get).asJava
 }

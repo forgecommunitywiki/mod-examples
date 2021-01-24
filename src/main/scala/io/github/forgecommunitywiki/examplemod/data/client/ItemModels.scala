@@ -43,26 +43,36 @@ import net.minecraftforge.client.model.generators.ModelProvider
 class ItemModels(generator: DataGenerator, existingFileHelper: ExistingFileHelper)
     extends ItemModelProvider(generator, ExampleMod.ID, existingFileHelper) {
 
-    override protected def registerModels(): Unit = {
-        simpleItem(GeneralRegistrar.DRUMSTICK)
-        simpleItem(GeneralRegistrar.CHICKEN_LEG)
-        simpleItem(GeneralRegistrar.COOKED_CHICKEN_LEG)
-        simpleItem(GeneralRegistrar.CHICKEN_DRUMSTICK)
-        simpleItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK)
+    override protected def registerModels: Unit = {
+        simpleItem(GeneralRegistrar.DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.CHICKEN_LEG.get)
+        simpleItem(GeneralRegistrar.COOKED_CHICKEN_LEG.get)
+        simpleItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.CHICKEN_LEG.get)
+        simpleItem(GeneralRegistrar.COOKED_CHICKEN_LEG.get)
+        simpleItem(GeneralRegistrar.CHICKEN_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.OAK_LOG_DRUM_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.BIRCH_LOG_DRUM_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.SPRUCE_LOG_DRUM_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.JUNGLE_LOG_DRUM_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.ACACIA_LOG_DRUM_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.DARK_OAK_LOG_DRUM_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.CRIMSON_STEM_DRUM_DRUMSTICK.get)
+        simpleItem(GeneralRegistrar.WARPED_STEM_DRUM_DRUMSTICK.get)
     }
 
     /**
      * Adds a simple item to be generated. It creates an {@code item/generated}
      * model with the base texture pointing to its registry name representation.
      *
-     * We do not use () -> Item here as in the Kotlin language due to the
-     * {@code RegistryObject} wrapper.
-     *
-     * @param itemSupplier The item to generate the model for
+     * @param item The item to generate the model for
      */
-    protected def simpleItem[T <: Item](itemSupplier: Supplier[T]): Unit =
-        new Some(itemSupplier.get().getRegistryName()).map(location =>
-            this.getBuilder(location.toString()).parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", new ResourceLocation(location.getNamespace(), ModelProvider.ITEM_FOLDER + "/" + location.getPath()))
-        ).map(_ => {}).get
+    protected def simpleItem(item: Item): Unit =
+        new Some(item.getRegistryName).map(location =>
+            this.getBuilder(location.toString).parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", new ResourceLocation(location.getNamespace, ModelProvider.ITEM_FOLDER + "/" + location.getPath))
+        ).get
 }

@@ -22,29 +22,31 @@
  * SOFTWARE.
  */
 
-package io.github.forgecommunitywiki.examplemod.data.server
+package io.github.forgecommunitywiki.examplemod.item
 
-import net.minecraft.data.DataGenerator
-import net.minecraftforge.common.data.GlobalLootModifierProvider
-import io.github.forgecommunitywiki.examplemod.ExampleMod
-import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
-import io.github.forgecommunitywiki.examplemod.loot.ReplaceLootModifier
-import net.minecraft.loot.conditions.RandomChance
-import net.minecraft.item.Items
+import net.minecraft.block.Block
+import io.github.forgecommunitywiki.examplemod.block.IWrappedState
+import net.minecraft.item.Item.Properties
+import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
+import net.minecraft.tileentity.AbstractFurnaceTileEntity
 
 /**
- * A provider used to generate loot modifiers as needed. These can either
- * replace, remove, or append items as specified by the modifier used.
+ * A {@link BlockItem} that borrows the properties of a wrapped instance held
+ * within {@link IWrappedState}.
  */
-class GlobalLootModifiers(gen: DataGenerator) extends GlobalLootModifierProvider(gen, ExampleMod.ID) {
+class WrappedBlockItem[T <: Block with IWrappedState](block: T, properties: Properties)
+    extends BlockItem(block, properties) {
 
-    override def start: Unit = {
-        add("chicken_leg", GeneralRegistrar.REPLACE_LOOT.get,
-            new ReplaceLootModifier(Array(RandomChance.builder(0.4f).build),
-                Items.CHICKEN, new ItemStack(GeneralRegistrar.CHICKEN_LEG.get, 2)))
-        add("cooked_chicken_leg", GeneralRegistrar.REPLACE_LOOT.get,
-            new ReplaceLootModifier(Array(RandomChance.builder(0.3f).build),
-                Items.COOKED_CHICKEN, new ItemStack(GeneralRegistrar.COOKED_CHICKEN_LEG.get, 2)))
+    /**
+     * Used to mimic the properties of the wrapped block. For example, a block that
+     * holds an oak log will have the same burn time as the oak log.
+     */
+    //@nowarn // Forge deprecation, only used to get vanilla burn times
+    override def getBurnTime(itemStack: ItemStack): Int = {
+        val item = this.getBlock.asInstanceOf[IWrappedState].getWrappedState.getBlock.asItem
+        val time = item.getBurnTime(itemStack)
+        if(time == -1) AbstractFurnaceTileEntity.getBurnTimes().getOrDefault(item, -1)
+        else time
     }
 }

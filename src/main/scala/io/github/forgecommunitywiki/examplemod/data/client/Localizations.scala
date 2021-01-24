@@ -40,13 +40,23 @@ import net.minecraft.util.DamageSource
 class Localizations(gen: DataGenerator, locale: String)
     extends LanguageProvider(gen, ExampleMod.ID, locale) {
 
-    override protected def addTranslations(): Unit =
-        getName().replace("Languages: ", "") match {
+    override protected def addTranslations: Unit =
+        getName.replace("Languages: ", "") match {
             case "en_us" => {
                 // Damage Sources
                 this.addDeathMessage(GeneralRegistrar.INTERNAL_HEMORRHAGE_SOURCE,
                     "%1$s internally bled to death",
                     "%1$s internally bled to death whilst fighting %2$s")
+
+                // Blocks
+                this.addBlock(GeneralRegistrar.OAK_LOG_DRUM, "Oak Log Drum")
+                this.addBlock(GeneralRegistrar.BIRCH_LOG_DRUM, "Birch Log Drum")
+                this.addBlock(GeneralRegistrar.SPRUCE_LOG_DRUM, "Spruce Log Drum")
+                this.addBlock(GeneralRegistrar.JUNGLE_LOG_DRUM, "Jungle Log Drum")
+                this.addBlock(GeneralRegistrar.ACACIA_LOG_DRUM, "Acacia Log Drum")
+                this.addBlock(GeneralRegistrar.DARK_OAK_LOG_DRUM, "Dark Oak Log Drum")
+                this.addBlock(GeneralRegistrar.CRIMSON_STEM_DRUM, "Crimson Stem Drum")
+                this.addBlock(GeneralRegistrar.WARPED_STEM_DRUM, "Warped Stem Drum")
 
                 // Items
                 this.addItem(GeneralRegistrar.DRUMSTICK, "Drumstick")
@@ -54,19 +64,28 @@ class Localizations(gen: DataGenerator, locale: String)
                 this.addItem(GeneralRegistrar.COOKED_CHICKEN_LEG, "Cooked Chicken Leg")
                 this.addItem(GeneralRegistrar.CHICKEN_DRUMSTICK, "Chicken Drumstick")
                 this.addItem(GeneralRegistrar.COOKED_CHICKEN_DRUMSTICK, "Cooked Chicken Drumstick")
+                this.addItem(GeneralRegistrar.OAK_LOG_DRUM_DRUMSTICK, "Oak Log \"Drum\"stick")
+                this.addItem(GeneralRegistrar.BIRCH_LOG_DRUM_DRUMSTICK, "Birch Log \"Drum\"stick")
+                this.addItem(GeneralRegistrar.SPRUCE_LOG_DRUM_DRUMSTICK, "Spruce Log \"Drum\"stick")
+                this.addItem(GeneralRegistrar.JUNGLE_LOG_DRUM_DRUMSTICK, "Jungle Log \"Drum\"stick")
+                this.addItem(GeneralRegistrar.ACACIA_LOG_DRUM_DRUMSTICK, "Acacia Log \"Drum\"stick")
+                this.addItem(GeneralRegistrar.DARK_OAK_LOG_DRUM_DRUMSTICK, "Dark Oak Log \"Drum\"stick")
+                this.addItem(GeneralRegistrar.CRIMSON_STEM_DRUM_DRUMSTICK, "Crimson Stem \"Drum\"stick")
+                this.addItem(GeneralRegistrar.WARPED_STEM_DRUM_DRUMSTICK, "Warped Stem \"Drum\"stick")
 
                 // Effects
                 this.addEffect(GeneralRegistrar.INTERNAL_HEMORRHAGE, "Internal Hemorrhage")
 
                 // Sound Events
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_OAK_LOG_HIT, "Drumstick Hits Oak Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_BIRCH_LOG_HIT, "Drumstick Hits Birch Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_SPRUCE_LOG_HIT, "Drumstick Hits Spruce Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_JUNGLE_LOG_HIT, "Drumstick Hits Jungle Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_ACACIA_LOG_HIT, "Drumstick Hits Acacia Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_DARK_OAK_LOG_HIT, "Drumstick Hits Dark Oak Log")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_CRIMSON_STEM_HIT, "Drumstick Hits Crimson Stem")
-                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_WARPED_STEM_HIT, "Drumstick Hits Warped Stem")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_OAK_LOG_HIT.get, "Drumstick Hits Oak Log")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_BIRCH_LOG_HIT.get, "Drumstick Hits Birch Log")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_SPRUCE_LOG_HIT.get, "Drumstick Hits Spruce Log")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_JUNGLE_LOG_HIT.get, "Drumstick Hits Jungle Log")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_ACACIA_LOG_HIT.get, "Drumstick Hits Acacia Log")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_DARK_OAK_LOG_HIT.get, "Drumstick Hits Dark Oak Log")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_CRIMSON_STEM_HIT.get, "Drumstick Hits Crimson Stem")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUMSTICK_WARPED_STEM_HIT.get, "Drumstick Hits Warped Stem")
+                this.addSoundEventSubtitle(GeneralRegistrar.DRUM_TEST_HIT.get, "Drum Pitch Shifts")
             }
             case _ => {}
         }
@@ -80,8 +99,8 @@ class Localizations(gen: DataGenerator, locale: String)
      * @param key   The sound event to add a subtitle for
      * @param value The localized subtitle
      */
-    protected def addSoundEventSubtitle(key: Supplier[SoundEvent], value: String): Unit =
-        add(key.get().getRegistryName().toString().replace(':', '.'), value)
+    protected def addSoundEventSubtitle(key: SoundEvent, value: String): Unit =
+        add(key.getRegistryName.toString.replace(':', '.'), value)
 
     /**
      * Adds a death message translation in the default format provided by

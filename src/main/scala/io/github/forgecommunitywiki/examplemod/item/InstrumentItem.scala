@@ -30,24 +30,47 @@ import net.minecraft.item.ItemUseContext
 import net.minecraft.util.ActionResultType
 import io.github.forgecommunitywiki.examplemod.GeneralRegistrar
 import net.minecraft.util.SoundCategory
+import net.minecraft.item.ItemStack
+import net.minecraft.block.BlockState
+import net.minecraft.util.SoundEvent
 
 /**
- * An instrument element used to play sounds on right click. It will choose a
- * random pitch to test the sound for.
+ * An instrument element used to play sounds on right click of a certain block.
+ * It will choose a random pitch to play the sound at.
  */
-class InstrumentElementItem(properties: Properties) extends Item(properties) {
+class InstrumentItem(private final val burnTime: Int, properties: Properties) extends Item(properties) {
+
+    /**
+     * Convenience constructor for non-burnable items.
+     *
+     * @param properties The properties associated with the item
+     */
+    def this(properties: Properties) = this(-1, properties)
 
     /**
      * Plays the sound on item use for the specific block.
      */
     override def onItemUse(context: ItemUseContext): ActionResultType = {
-        val world = context.getWorld()
-        val pos = context.getPos()
-        GeneralRegistrar.getInstrumentElementSounds(this, world.getBlockState(pos).getBlock())
+        val world = context.getWorld
+        val pos = context.getPos
+        this.getInstrumentSound(context.getItem, world.getBlockState(pos))
             .map(sound => {
-                world.playSound(context.getPlayer(), pos, sound, SoundCategory.BLOCKS, 0.1f,
+                world.playSound(context.getPlayer, pos, sound, SoundCategory.BLOCKS, 0.1f,
                     Math.pow(2d, (Item.random.nextInt(24) - 12) / 12d).toFloat)
                 ActionResultType.func_233537_a_(world.isRemote)
             }).getOrElse(super.onItemUse(context))
     }
+
+    /**
+     * Gets the sound of the instrument to play if present.
+     *
+     * @param stack The stack hitting the block
+     * @param state The state of the block being hit
+     * @return The sound event if present
+     */
+    def getInstrumentSound(stack: ItemStack, state: BlockState): Option[SoundEvent] =
+        if(stack.getItem.isInstanceOf[InstrumentItem]) GeneralRegistrar.getInstrumentElementSounds(stack.getItem.asInstanceOf[InstrumentItem], state.getBlock)
+        else None
+
+    override def getBurnTime(itemStack: ItemStack): Int = burnTime
 }
