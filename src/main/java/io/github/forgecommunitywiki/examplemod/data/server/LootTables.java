@@ -39,7 +39,7 @@ import net.minecraft.loot.LootTable.Builder;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * A provider used to generate loot tables for associated blocks.
+ * A provider used to generate loot tables for associated parameter sets.
  */
 public class LootTables extends LootTableProvider {
 

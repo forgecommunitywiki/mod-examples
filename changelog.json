@@ -1,0 +1,28 @@
+{
+    "homepage": "https://github.com/forgecommunitywiki/mod-examples",
+    "promos": {
+        "1.16.5-latest": "1.0.2.2",
+        "1.16.5-recommended": "1.0.2.2",
+        "1.16.4-latest": "1.0.2.1",
+        "1.16.4-recommended": "1.0.2.1"
+    },
+    "1.16.4": {
+        "0.0.1.0": "Basic example for Java",
+        "0.0.2.0": "Update all information to Java 8",
+        "0.0.3.0": "Register setup",
+        "0.0.4.0": "Update to Forge Community Wiki",
+        "0.0.5.0": "Fix package hierarchy",
+        "1.0.0.0": "Add Drumstick with Log Interaction Sounds",
+        "1.0.0.1": "Make register methods protected",
+        "1.0.0.2": "Match Kotlin Changes",
+        "1.0.0.3": "Move Optional to method invocation to match other languages",
+        "1.0.1.0": "Added chicken legs and drumsticks",
+        "1.0.1.1": "Streamify loot modifier",
+        "1.0.1.2": "Fix redundant code",
+        "1.0.2.0": "Drums and Drum Drumsticks",
+        "1.0.2.1": "Minor optimizations"
+    },
+    "1.16.5": {
+        "1.0.2.2": "Update Gradle and Forge version"
+    }
+}
