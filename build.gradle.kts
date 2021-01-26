@@ -25,7 +25,7 @@ plugins {
 apply(plugin = "net.minecraftforge.gradle")
 
 // Default Mod Information
-version = "1.0.2.1"
+version = "1.0.2.2"
 group = "io.github.forgecommunitywiki" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 base.archivesBaseName = "examplemod-1.16.x"
 
