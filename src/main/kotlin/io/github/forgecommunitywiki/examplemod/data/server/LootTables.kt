@@ -38,7 +38,7 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 
 /**
- * A provider used to generate loot tables for associated blocks.
+ * A provider used to generate loot tables for associated parameter sets.
  */
 class LootTables(generator: DataGenerator) : LootTableProvider(generator) {
 

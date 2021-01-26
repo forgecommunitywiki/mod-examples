@@ -14,7 +14,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "3.+")
+        classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "4.0.10")
     }
 }
 plugins {
@@ -25,9 +25,21 @@ plugins {
 apply(plugin = "net.minecraftforge.gradle")
 
 // Default Mod Information
-version = "1.0.0.0"
+version = "1.0.2.1"
 group = "io.github.forgecommunitywiki" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-base.archivesBaseName = "examplemod"
+base.archivesBaseName = "examplemod-1.16.x"
+
+// Sets the toolchain to compile against OpenJDK 8
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+    }
+}
+// Forces JVM targets to be 8
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions.jvmTarget = "1.8"
+}
 
 ktlint {
     version.set("0.37.2")
@@ -119,7 +131,7 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then "net.minecraft" it is assumed
     // that the dep is a ForgeGradle "patcher" dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    "minecraft"("net.minecraftforge:forge:1.16.4-35.1.36")
+    "minecraft"("net.minecraftforge:forge:1.16.5-36.0.4")
 
     // Specify that the standard library of Kotlin that should be used to compile
     implementation(project.the<DependencyManagementExtension>().deobf("thedarkcolour:kotlinforforge:1.7.0"))
@@ -152,13 +164,4 @@ tasks {
         // This is the preferred method to reobfuscate your jar file
         finalizedBy("reobfJar")
     }
-}
-
-// Forces JVM targets to be 8
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.jvmTarget = "1.8"
-}
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }
