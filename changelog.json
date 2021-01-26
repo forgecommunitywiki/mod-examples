@@ -1,0 +1,24 @@
+{
+    "homepage": "https://github.com/forgecommunitywiki/mod-examples",
+    "promos": {
+        "1.16.5-latest": "1.0.2.1",
+        "1.16.5-recommended": "1.0.2.1",
+        "1.16.4-latest": "1.0.2.0",
+        "1.16.4-recommended": "1.0.2.0"
+    },
+    "1.16.4": {
+        "0.0.1.0": "Add information for Scala",
+        "0.0.2.0": "Add Scorge and downgrade to 2.13.1",
+        "0.0.3.0": "Update to Forge Community Wiki",
+        "1.0.0.0": "Scala port of drumsticks",
+        "1.0.0.1": "Add function return types and simplify method references",
+        "1.0.0.2": "Resolve maps during common setup",
+        "1.0.0.3": "Adjust formatting",
+        "1.0.1.0": "Port chicken legs and drumsticks",
+        "1.0.1.1": "Fix redundant code",
+        "1.0.2.0": "Port of drums and drum drumsticks"
+    },
+    "1.16.5": {
+        "1.0.2.1": "Update Gradle and Forge version"
+    }
+}
