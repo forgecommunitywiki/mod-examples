@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.0.10', changing: true
     }
 }
 plugins {
@@ -15,10 +15,15 @@ apply plugin: 'net.minecraftforge.gradle'
 
 version = '1.0.0.0'
 group = 'io.github.forgecommunitywiki' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'examplemod'
+archivesBaseName = 'examplemod-1.16.x'
 
-// Forces JVM targets to be 8
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaVersion.VERSION_1_8
+// Sets the toolchain to compile against OpenJDK 8
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+        vendor = JvmVendorSpec.ADOPTOPENJDK
+    }
+}
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -97,7 +102,7 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.36'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.13'
     
     // Specify that the standard library of Clojure that should be used to compile
     implementation 'org.clojure:clojure:1.10.1'
@@ -124,6 +129,9 @@ jar {
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+    
+    // This is the preferred method to reobfuscate your jar file
+    finalizedBy('reobfJar')
 }
 
 checkClojure.enabled = false
@@ -138,6 +146,3 @@ clojure {
         }
     }
 }
-
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
