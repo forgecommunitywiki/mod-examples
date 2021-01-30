@@ -1,0 +1,1 @@
+shared package io.github.forgecommunitywiki.examplemod;
